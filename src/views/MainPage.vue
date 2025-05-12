@@ -1,65 +1,64 @@
 <template>
   <div class="main-page">
-    <HeaderUser />
+    <HeaderUser/>
 
     <main class="cards-grid">
       <Card title="MOJE SALDO" icon="/moje_saldo.png">
-        <p class="value">50.000 PLN</p>
-        <p class="converted">➡ 12.000 EUR</p>
+        <p class="value">{{ saldo }} PLN</p>
+        <p class="converted">➡ {{ euroSaldo }} EUR</p>
       </Card>
 
       <Card title="ANALIZA" icon="/analiza.png">
         <ul class="analysis-stats">
-          <li>💸 Wydatki w tym tygodniu: <strong>920 PLN</strong></li>
-          <li>📈 Średnie dzienne: <strong>131 PLN</strong></li>
+          <li>💸 Wydatki w tym tygodniu: <strong>{{ weeklyExpenses }} PLN</strong></li>
+          <li>📈 Średnie dzienne: <strong>{{ meanOfWeeklyExpenses }} PLN</strong></li>
           <li>🔄 Zmiana wydatków: <span class="green">−8%</span></li>
         </ul>
       </Card>
 
       <Card title="KATEGORIE" icon="/kategorie.png">
         <ul class="category-list">
-          <li><span>3000 PLN — Czynsz</span><span class="green">100%</span></li>
-          <li><span>600 PLN — Zakupy spożywcze</span><span class="green">80%</span></li>
-          <li><span>400 PLN — Paliwo</span><span class="orange">50%</span></li>
+          <li v-for="(category, index) in categories" :key="index">
+            <span>
+            {{ category.totalAmount }} PLN — {{ category.categoryName }}
+            </span>
+            <span class="green">100%</span>
+          </li>
         </ul>
       </Card>
 
       <Card title="OSZCZĘDNOŚCI" icon="/savings.png">
-        <p class="value">8.000 PLN</p>
-        <p class="converted">➡ 1.920 EUR</p>
+        <p class="value">{{ savingsBalance }} PLN</p>
+        <p class="converted">➡ {{ savingsBalanceEuro }} EUR</p>
       </Card>
 
       <Card title="KALENDARZ" icon="/kalendarz.png">
         <p class="date">31.05.2025 r. 15:31</p>
         <ul class="calendar-list">
-          <li>
+          <li v-for="(obligation, index) in lastObligations" :key="index">
             <span>
-              <img src="/check.png" alt="✔" class="status-icon" />
-              31.05.2025 Subskrypcja Netflix
+              <img src="/not_check.png" alt="❌" class="status-icon"/>
+              {{ obligation.dateToPay }} — {{ obligation.obligationTitle }}
             </span>
-            <span>39 PLN</span>
-          </li>
-          <li>
-            <span>
-              <img src="/not_check.png" alt="❌" class="status-icon" />
-              02.06.2025 Rachunek za gaz
-            </span>
-            <span>340 PLN</span>
+            <span>{{ obligation.obligationAmount }} PLN</span>
           </li>
         </ul>
       </Card>
 
       <Card title="TRANSAKCJE" icon="/transakcje.png">
         <ul class="transactions">
-          <li><span>29.05.2025 Subskrypcja Netflix</span><span class="red">-39</span></li>
-          <li><span>20.05.2025 Rachunek za prąd</span><span class="red">-120</span></li>
-          <li><span>10.05.2025 Wynagrodzenie</span><span class="green">+5000</span></li>
+          <li v-for="(transaction, index) in lastTransactions" :key="index">
+            <span>
+            {{ transaction.transactionDate }} {{ transaction.transactionTitle }}
+            </span>
+            <span class="red">{{ transaction.amount }}  PLN</span>
+          </li>
         </ul>
       </Card>
     </main>
 
     <footer class="footer">
-      © Wojskowa Akademia Techniczna 2025<br />
+      © Wojskowa Akademia Techniczna 2025<br/>
       ZeniVault
     </footer>
   </div>
@@ -68,6 +67,45 @@
 <script setup>
 import HeaderUser from '@/components/HeaderUser.vue'
 import Card from '@/components/Card.vue'
+import axios from 'axios'
+import {ref, onMounted} from 'vue'
+import {API_URL} from '../constants/const.ts'
+
+const saldo = ref(0)
+const euroSaldo = ref(0)
+const weeklyExpenses = ref(0)
+const meanOfWeeklyExpenses = ref(0)
+const categories = ref([])
+const savingsBalance = ref(0)
+const savingsBalanceEuro = ref(0)
+const lastObligations = ref([])
+const lastTransactions = ref([])
+
+const getMainInformations = async () => {
+  try {
+    const res = await axios.get(`${API_URL}/index/6`)
+    console.log(res.data)
+    const data = res.data
+
+    saldo.value = data.saldo.toFixed(2)
+    euroSaldo.value = data.euroSaldo.toFixed(2)
+    weeklyExpenses.value = data.weeklyExpenses.toFixed(2)
+    meanOfWeeklyExpenses.value = data.meanOfweeklyExpenses.toFixed(2)
+    categories.value = data.categories
+    savingsBalance.value = data.savingsBalance.toFixed(2)
+    savingsBalanceEuro.value = data.savingsBalanceEuro.toFixed(2)
+    lastObligations.value = data.lastObligations
+    lastTransactions.value = data.lastTransactions
+
+  } catch (err) {
+    console.error('Błąd podczas pobierania danych:', err)
+    alert('Błąd podczas pobierania danych.')
+  }
+}
+
+onMounted(() => {
+  getMainInformations()
+})
 </script>
 
 <style scoped>
@@ -162,5 +200,11 @@ import Card from '@/components/Card.vue'
   padding: 2rem 1rem;
   font-size: 0.9rem;
   color: white;
+}
+
+@media (min-width: 1280px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 kolumny na dużych ekranach */
+  }
 }
 </style>
