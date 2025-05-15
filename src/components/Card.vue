@@ -4,10 +4,16 @@
       <img :src="icon" alt="Ikona" class="icon" />
       <h2 class="title">{{ title }}</h2>
     </div>
+
     <div class="card-content">
       <slot />
     </div>
-    <button class="more-button">Zobacz więcej</button>
+
+    <div class="card-footer">
+      <slot name="footer">
+        <button v-if="showMoreButton" class="more-button">Zobacz więcej</button>
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -15,12 +21,13 @@
 defineProps<{
   title: string
   icon: string
+  showMoreButton?: boolean
 }>()
 </script>
 
 <style scoped>
 .card {
-  background-color: #f1f1dc; /* jasnobeżowe tło */
+  background-color: #f1f1dc;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -52,8 +59,12 @@ defineProps<{
   margin-bottom: 1rem;
 }
 
+.card-footer {
+  margin-top: auto;
+  text-align: right;
+}
+
 .more-button {
-  align-self: flex-start;
   background-color: #5118fd;
   color: white;
   border: none;
@@ -62,6 +73,8 @@ defineProps<{
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none; /* <-- WAŻNE: dla router-link */
+  display: inline-block;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -69,4 +82,5 @@ defineProps<{
   opacity: 0.85;
   transform: scale(1.02);
 }
+
 </style>

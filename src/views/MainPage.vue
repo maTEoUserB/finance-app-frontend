@@ -8,7 +8,7 @@
         <p class="converted">➡ {{ euroSaldo }} EUR</p>
       </Card>
 
-      <Card title="ANALIZA" icon="/analiza.png">
+      <Card title="ANALIZA" icon="/analiza.png" :showMoreButton="true">
         <ul class="analysis-stats">
           <li>💸 Wydatki w tym tygodniu: <strong>{{ weeklyExpenses }} PLN</strong></li>
           <li>📈 Średnie dzienne: <strong>{{ meanOfWeeklyExpenses }} PLN</strong></li>
@@ -16,7 +16,7 @@
         </ul>
       </Card>
 
-      <Card title="KATEGORIE" icon="/kategorie.png">
+      <Card title="KATEGORIE" icon="/kategorie.png" :showMoreButton="true">
         <ul class="category-list">
           <li v-for="(category, index) in categories" :key="index">
             <span>
@@ -27,12 +27,12 @@
         </ul>
       </Card>
 
-      <Card title="OSZCZĘDNOŚCI" icon="/savings.png">
+      <Card title="OSZCZĘDNOŚCI" icon="/savings.png" :showMoreButton="true">
         <p class="value">{{ savingsBalance }} PLN</p>
         <p class="converted">➡ {{ savingsBalanceEuro }} EUR</p>
       </Card>
 
-      <Card title="KALENDARZ" icon="/kalendarz.png">
+      <Card title="KALENDARZ" icon="/kalendarz.png" :showMoreButton="true">
         <p class="date">31.05.2025 r. 15:31</p>
         <ul class="calendar-list">
           <li v-for="(obligation, index) in lastObligations" :key="index">
@@ -45,7 +45,7 @@
         </ul>
       </Card>
 
-      <Card title="TRANSAKCJE" icon="/transakcje.png">
+      <Card title="TRANSAKCJE" icon="/transakcje.png" :showMoreButton="true">
         <ul class="transactions">
           <li v-for="(transaction, index) in lastTransactions" :key="index">
             <span>
@@ -54,6 +54,9 @@
             <span class="red">{{ transaction.amount }}  PLN</span>
           </li>
         </ul>
+        <template #footer>
+          <router-link to="/transakcje" class="more-button">Zobacz więcej</router-link>
+        </template>
       </Card>
     </main>
 
@@ -200,6 +203,25 @@ onMounted(() => {
   padding: 2rem 1rem;
   font-size: 0.9rem;
   color: white;
+}
+
+.more-button {
+  background-color: #5118fd;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.more-button:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 
 @media (min-width: 1280px) {
