@@ -6,9 +6,9 @@
       </div>
       <div class="buttons">
         <div class="left-buttons">
-          <button class="btn ghost">Dodaj cel</button>
-          <button class="btn ghost">Dodaj termin płatności</button>
-          <button class="btn ghost">Dodaj transakcję</button>
+          <router-link to="/dodaj-cel" class="nav-link">Dodaj cel</router-link>
+          <router-link to="/dodaj-termin" class="nav-link">Dodaj termin płatności</router-link>
+          <router-link to="/dodaj-transakcje" class="nav-link">Dodaj transakcję</router-link>
         </div>
         <div class="right-buttons">
           <button @click="logout" class="btn filled">Wyloguj</button>
@@ -96,6 +96,25 @@ const logout = () => {
   background: #5118fd;
   color: white;
 }
+
+.nav-link {
+  color: white;
+  font-size: 1.05rem;
+  font-weight: normal;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #2EC0FB;
+}
+
+.router-link-exact-active.nav-link {
+  color: #2EC0FB;
+  text-decoration: underline;
+}
+
 </style>
 <script setup lang="ts">
 </script>
