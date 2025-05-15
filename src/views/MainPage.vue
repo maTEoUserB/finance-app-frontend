@@ -12,7 +12,7 @@
         <ul class="analysis-stats">
           <li>💸 Wydatki w tym tygodniu: <strong>{{ weeklyExpenses }} PLN</strong></li>
           <li>📈 Średnie dzienne: <strong>{{ meanOfWeeklyExpenses }} PLN</strong></li>
-          <li>🔄 Zmiana wydatków: <span class="green">−8%</span></li>
+          <li>🔄 Zmiana wydatków: <span class="green">{{ weeklyChange }}%</span></li>
         </ul>
       </Card>
 
@@ -22,7 +22,7 @@
             <span>
             {{ category.totalAmount }} PLN — {{ category.categoryName }}
             </span>
-            <span class="green">100%</span>
+            <span class="green">{{ Math.round(category.budgetProcent * 100) }}%</span>
           </li>
         </ul>
       </Card>
@@ -73,11 +73,13 @@ import Card from '@/components/Card.vue'
 import axios from 'axios'
 import {ref, onMounted} from 'vue'
 import {API_URL} from '../constants/const.ts'
+import { keycloak } from '../auth/keycloak';
 
 const saldo = ref(0)
 const euroSaldo = ref(0)
 const weeklyExpenses = ref(0)
 const meanOfWeeklyExpenses = ref(0)
+const weeklyChange = ref(0)
 const categories = ref([])
 const savingsBalance = ref(0)
 const savingsBalanceEuro = ref(0)
@@ -86,19 +88,26 @@ const lastTransactions = ref([])
 
 const getMainInformations = async () => {
   try {
-    const res = await axios.get(`${API_URL}/index/6`)
-    console.log(res.data)
-    const data = res.data
+    const token = keycloak.token;
 
-    saldo.value = data.saldo.toFixed(2)
-    euroSaldo.value = data.euroSaldo.toFixed(2)
-    weeklyExpenses.value = data.weeklyExpenses.toFixed(2)
-    meanOfWeeklyExpenses.value = data.meanOfweeklyExpenses.toFixed(2)
-    categories.value = data.categories
-    savingsBalance.value = data.savingsBalance.toFixed(2)
-    savingsBalanceEuro.value = data.savingsBalanceEuro.toFixed(2)
-    lastObligations.value = data.lastObligations
-    lastTransactions.value = data.lastTransactions
+    const res = await axios.get(`${API_URL}/index/6`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log(res.data)
+
+    const data = res.data
+    saldo.value = data.saldo?.toFixed(2) ?? '0.00'
+    euroSaldo.value = data.euroSaldo?.toFixed(2) ?? '0.00'
+    weeklyExpenses.value = data.weeklyExpenses?.toFixed(2) ?? '0.00'
+    weeklyChange.value = data.weeklyChange?.toFixed(2) ?? '0.00'
+    meanOfWeeklyExpenses.value = data.meanOfWeeklyExpenses?.toFixed(2) ?? '0.00'
+    categories.value = data.categories ?? []
+    savingsBalance.value = data.savingsBalance?.toFixed(2) ?? '0.00'
+    savingsBalanceEuro.value = data.savingsBalanceEuro?.toFixed(2) ?? '0.00'
+    lastObligations.value = data.lastObligations ?? []
+    lastTransactions.value = data.lastTransactions ?? []
 
   } catch (err) {
     console.error('Błąd podczas pobierania danych:', err)

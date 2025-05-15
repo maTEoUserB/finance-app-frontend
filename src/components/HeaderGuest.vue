@@ -10,13 +10,15 @@
           <button class="btn ghost">Funkcjonalności</button>
         </div>
         <div class="right-buttons">
-          <button class="btn filled">Zaloguj się</button>
-          <button class="btn filled">Załóż konto</button>
+          <button class="btn filled" @click="login">Zaloguj się</button>
         </div>
       </div>
     </div>
   </header>
 </template>
+
+<script setup>
+</script>
 
 <style scoped>
 .header {

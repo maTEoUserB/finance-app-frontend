@@ -11,13 +11,23 @@
           <router-link to="/dodaj-transakcje" class="nav-link">Dodaj transakcję</router-link>
         </div>
         <div class="right-buttons">
-          <button class="btn filled">Wyloguj</button>
+          <button @click="logout" class="btn filled">Wyloguj</button>
           <button class="btn filled">Moje konto</button>
         </div>
       </div>
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+import {keycloak} from "../auth/keycloak.js";
+
+const logout = () => {
+  keycloak.logout({
+    redirectUri: window.location.origin
+  });
+};
+</script>
 
 <style scoped>
 .header {
