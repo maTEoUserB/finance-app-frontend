@@ -26,6 +26,16 @@ const initRouter = createRouter({
             path: '/transakcje',
             name: 'TransactionPage',
             component: () => import('../views/TransactionPage.vue')
+        },
+        {
+            path: '/kategorie',
+            name: 'CategoryPage',
+            component: () => import('../views/CategoryPage.vue')
+        },
+        {
+            path: '/oszczednosci',
+            name: 'SavingsGoalPage',
+            component: () => import('../views/SavingsGoalPage.vue')
         }
     ],
 })

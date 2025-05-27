@@ -47,17 +47,17 @@
             <label>Typ:
               <select v-model="filters.type">
                 <option value="">Wszystkie</option>
-                <option value="INCOME">Przychód</option>
-                <option value="EXPENSE">Wydatek</option>
+                <option value="income">Przychód</option>
+                <option value="expense">Wydatek</option>
               </select>
             </label>
 
             <label>Kwota od:
-              <input type="number" v-model.number="filters.amountFrom" />
+              <input type="number" step="0.01" v-model.number="filters.amountFrom" />
             </label>
 
             <label>Kwota do:
-              <input type="number" v-model.number="filters.amountTo" />
+              <input type="number" step="0.01" v-model.number="filters.amountTo" />
             </label>
 
             <div class="modal-actions">
@@ -136,8 +136,8 @@ const filteredTransactions = computed(() =>
       const titleMatch = tx.transactionTitle.toLowerCase().includes(search.value.toLowerCase())
       const categoryMatch =
           filters.value.categories.length === 0 ||
-          filters.value.categories.includes(tx.transactionCategory)
-      const typeMatch = !filters.value.type || tx.transactionType === filters.value.type
+          filters.value.categories.includes(tx.category)
+      const typeMatch = !filters.value.type || tx.type === filters.value.type
       const amountMatch =
           (!filters.value.amountFrom || tx.amount >= filters.value.amountFrom) &&
           (!filters.value.amountTo || tx.amount <= filters.value.amountTo)

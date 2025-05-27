@@ -25,11 +25,17 @@
             <span class="green">{{ Math.round(category.budgetProcent * 100) }}%</span>
           </li>
         </ul>
+        <template #footer>
+          <router-link to="/kategorie" class="more-button">Zobacz więcej</router-link>
+        </template>
       </Card>
 
       <Card title="OSZCZĘDNOŚCI" icon="/savings.png" :showMoreButton="true">
         <p class="value">{{ savingsBalance }} PLN</p>
         <p class="converted">➡ {{ savingsBalanceEuro }} EUR</p>
+        <template #footer>
+          <router-link to="/oszczednosci" class="more-button">Zobacz więcej</router-link>
+        </template>
       </Card>
 
       <Card title="KALENDARZ" icon="/kalendarz.png" :showMoreButton="true">
@@ -203,18 +209,8 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.red {
-  color: red;
-  font-weight: bold;
-}
-
 .blue {
   color: darkblue;
-  font-weight: bold;
-}
-
-.orange {
-  color: orange;
   font-weight: bold;
 }
 
