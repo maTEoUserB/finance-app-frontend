@@ -2,15 +2,15 @@
   <div class="transaction-card">
     <div class="left">
       <div class="date-title">
-        <span class="date">📅 {{ transaction.date }}</span>
-        <span class="title">{{ transaction.title }}</span>
+        <span class="date">📅 {{ formatDate(transaction.transactionDate) }}</span>
+        <span class="title">{{ transaction.transactionTitle }}</span>
       </div>
-      <p class="description">{{ transaction.description }}</p>
+      <p class="description">{{ transaction.transactionDescription }}</p>
     </div>
 
     <div class="right">
       <p :class="transaction.amount >= 0 ? 'amount income' : 'amount expense'">
-        {{ transaction.amount >= 0 ? '+' : '' }}{{ transaction.amount }} PLN
+        {{ transaction.type === 'income' ? '+' : '-' }}{{ transaction.amount }} PLN
       </p>
       <p class="category">{{ transaction.category }}</p>
       <button class="delete-button" @click="$emit('delete')">Usuń</button>
@@ -23,6 +23,15 @@ defineProps({
   transaction: Object
 })
 defineEmits(['delete'])
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+}
 </script>
 
 <style scoped>

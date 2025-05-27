@@ -28,48 +28,46 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import HeaderUser from '@/components/HeaderUser.vue'
 import TransactionCard from '@/components/TransactionCard.vue'
 import { useRouter } from 'vue-router'
+import {keycloak} from "@/auth/keycloak.js";
+import axios from "axios";
+import {API_URL} from "@/constants/const.js";
 
 const router = useRouter()
 
 const search = ref('')
-const transactions = ref([
-  {
-    date: '12.05.2025',
-    title: 'Rachunek za gaz',
-    description: 'Rachunek za gaz za maj...',
-    amount: -150,
-    category: 'Rachunki/opłaty'
-  },
-  {
-    date: '10.05.2025',
-    title: 'Wypłatka',
-    description: 'Wleciało 5 tysiaków...',
-    amount: 5000,
-    category: 'Pensja'
-  },
-  {
-    date: '09.05.2025',
-    title: 'Jedzenie',
-    description: 'A byłam sobie w restauracji...',
-    amount: -65,
-    category: 'Rozrywka'
-  },
-  {
-    date: '09.05.2025',
-    title: 'Bilecik miesięczny',
-    description: 'Znów trzeba bulić za komunikację...',
-    amount: -51,
-    category: 'Transport'
+
+const transactions = ref([])
+
+const getAllTransactions = async () => {
+  try {
+    const token = keycloak.token;
+
+    const res = await axios.get(`${API_URL}/transactions`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log(res.data)
+
+    transactions.value = res.data
+
+  } catch (err) {
+    console.error('Błąd podczas pobierania danych:', err)
+    alert('Błąd podczas pobierania danych.')
   }
-])
+}
+
+onMounted(() => {
+  getAllTransactions()
+})
 
 const filteredTransactions = computed(() =>
     transactions.value.filter(tx =>
-        tx.title.toLowerCase().includes(search.value.toLowerCase())
+        tx.transactionTitle.toLowerCase().includes(search.value.toLowerCase())
     )
 )
 

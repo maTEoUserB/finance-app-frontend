@@ -19,12 +19,12 @@
         <div class="amounts">
           <label>
             Ile już odłożyłeś?
-            <input type="number" v-model="savingsGoal.currentAmount" placeholder="0 PLN" required />
+            <input type="number" step="0.01" v-model="savingsGoal.currentAmount" placeholder="0.00 PLN" required />
           </label>
 
           <label>
             Ile chcesz odłożyć?
-            <input type="number" v-model="savingsGoal.finalAmount" placeholder="0 PLN" required />
+            <input type="number" step="0.01" v-model="savingsGoal.finalAmount" placeholder="0.00 PLN" required />
           </label>
         </div>
 
@@ -51,26 +51,49 @@
 import { ref } from 'vue'
 import HeaderUser from '@/components/HeaderUser.vue'
 import { useRouter } from 'vue-router'
+import {keycloak} from "@/auth/keycloak.js";
+import axios from "axios";
+import {API_URL} from "@/constants/const.js";
 
 const router = useRouter()
 
-const savingsGoal = ref({
+const savingsGoal = {
   title: '',
   description: '',
-  currentAmount: 0,
-  finalAmount: 0,
+  currentAmount: 0.0,
+  finalAmount: 0.0,
   deadline: ''
-})
+}
 
-const submitForm = () => {
-  console.log('Nowy cel:', goal.value)
-  alert('Cel został dodany!')
-  // Możesz tu dodać axios.post(...) do zapisania celu
-  router.push('/') // powrót do strony głównej po dodaniu
+const submitForm = async () => {
+
+  try {
+    const token = keycloak.token;
+
+    const res = await axios.post(`${API_URL}/new/savings_goal`, savingsGoal, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    console.log('Pomyśnie dodano nowy cel oszczędnościowy: ', res.data)
+    alert('Nowy cel oszczędnościowy został dodany.')
+
+    await router.push('/')
+  } catch (err) {
+    console.log('Błąd podczas dodawania celu oszczędnościowego: ', err)
+
+    if (axios.isAxiosError(err)) {
+      console.log('STATUS:', err.response?.status)
+      console.log('DATA:', err.response?.data)
+    }
+    await router.push('/')
+  }
 }
 
 const cancel = () => {
-  router.push('/') // powrót do strony głównej bez zapisu
+  router.push('/')
 }
 </script>
 
