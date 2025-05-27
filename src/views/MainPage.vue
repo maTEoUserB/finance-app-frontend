@@ -33,7 +33,7 @@
       </Card>
 
       <Card title="KALENDARZ" icon="/kalendarz.png" :showMoreButton="true">
-        <p class="date">31.05.2025 r. 15:31</p>
+        <p class="date">{{ formattedDate }}</p>
         <ul class="calendar-list">
           <li v-for="(obligation, index) in lastObligations" :key="index">
             <span>
@@ -45,13 +45,16 @@
         </ul>
       </Card>
 
-      <Card title="TRANSAKCJE" icon="/transakcje.png" :showMoreButton="true">
+      <Card title="OSTATNIE TRANSAKCJE" icon="/transakcje.png" :showMoreButton="true">
         <ul class="transactions">
           <li v-for="(transaction, index) in lastTransactions" :key="index">
             <span>
-            {{ transaction.transactionDate }} {{ transaction.transactionTitle }}
+            {{ formatDate(transaction.transactionDate) }}
+              <strong>
+                 {{ transaction.transactionTitle }}
+              </strong>
             </span>
-            <span class="red">{{ transaction.amount }}  PLN</span>
+            <span class="blue">{{ transaction.amount }}  PLN</span>
           </li>
         </ul>
         <template #footer>
@@ -75,6 +78,13 @@ import {ref, onMounted} from 'vue'
 import {API_URL} from '../constants/const.ts'
 import { keycloak } from '../auth/keycloak';
 
+const today = new Date()
+const formattedDate = today.toLocaleDateString('pl-PL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric'
+})
+
 const saldo = ref(0)
 const euroSaldo = ref(0)
 const weeklyExpenses = ref(0)
@@ -90,7 +100,7 @@ const getMainInformations = async () => {
   try {
     const token = keycloak.token;
 
-    const res = await axios.get(`${API_URL}/index/6`, {
+    const res = await axios.get(`${API_URL}/index`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -113,6 +123,15 @@ const getMainInformations = async () => {
     console.error('Błąd podczas pobierania danych:', err)
     alert('Błąd podczas pobierania danych.')
   }
+}
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
 }
 
 onMounted(() => {
@@ -186,6 +205,11 @@ onMounted(() => {
 
 .red {
   color: red;
+  font-weight: bold;
+}
+
+.blue {
+  color: darkblue;
   font-weight: bold;
 }
 

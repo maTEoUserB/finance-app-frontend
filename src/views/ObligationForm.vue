@@ -14,28 +14,28 @@
 
           <label>
             Kategoria
-            <select v-model="obligation.category" required>
+            <select v-model="obligation.categoryId" required>
               <option value="" disabled>Wybierz kategorię</option>
-              <option value="rachunki/oplaty">Rachunki/opłaty</option>
-              <option value="zywnosc">Żywność</option>
-              <option value="transport">Transport</option>
-              <option value="zdrowie/higiena">Zdrowie/higiena</option>
-              <option value="edukacja">Edukacja</option>
-              <option value="rodzina">Rodzina</option>
-              <option value="rozrywka">Rozrywka</option>
-              <option value="inne">Inne</option>
+              <option value=8>Rachunki/opłaty</option>
+              <option value=9>Żywność</option>
+              <option value=10>Transport</option>
+              <option value=11>Zdrowie/higiena</option>
+              <option value=12>Edukacja</option>
+              <option value=13>Rodzina</option>
+              <option value=14>Rozrywka</option>
+<!--              <option value=>Inne</option>-->
             </select>
           </label>
         </div>
 
         <label>
           Kwota
-          <input type="number" v-model="obligation.amount" placeholder="0 PLN" required />
+          <input type="number" step="0.01" v-model="obligation.amount" placeholder="0.00 PLN" required />
         </label>
 
         <label>
           Wybierz termin płatności
-          <input type="date" v-model="obligation.date_to_pay" required />
+          <input type="date" v-model="obligation.dateToPay" required />
         </label>
 
         <div class="form-buttons">
@@ -53,24 +53,45 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import HeaderUser from '@/components/HeaderUser.vue'
 import { useRouter } from 'vue-router'
+import {keycloak} from "@/auth/keycloak.js";
+import axios from "axios";
+import {API_URL} from "@/constants/const.js";
 
 const router = useRouter()
 
-const obligation = ref({
+const obligation = {
   title: '',
-  category: '',
-  amount: 0,
-  date_to_pay: ''
-})
+  amount: 0.0,
+  dateToPay: '',
+  categoryId: 0
+}
 
-const submitForm = () => {
-  console.log('Nowe zobowiązanie:', obligation.value)
-  alert('Termin płatności został dodany!')
-  // Możesz tu dodać axios.post(...) do zapisania zobowiązania
-  router.push('/')
+const submitForm = async () => {
+  try {
+    const token = keycloak.token;
+
+    const res = await axios.post(`${API_URL}/new/obligation`, obligation, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    console.log('Pomyśnie dodano nowy termin płatności: ', res.data)
+    alert('Nowy termin płatności został dodany.')
+
+    await router.push('/')
+  } catch (err) {
+    console.log('Błąd podczas dodawania terminu płatności: ', err)
+
+    if (axios.isAxiosError(err)) {
+      console.log('STATUS:', err.response?.status)
+      console.log('DATA:', err.response?.data)
+    }
+    await router.push('/')
+  }
 }
 
 const cancel = () => {
