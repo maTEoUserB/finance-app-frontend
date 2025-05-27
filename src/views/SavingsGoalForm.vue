@@ -106,7 +106,7 @@ const cancel = () => {
 }
 
 .form-container {
-  background-color: #d9d9d9;
+  background-color: #f1f1dc;
   padding: 2rem;
   max-width: 600px;
   margin: 2rem auto;
@@ -181,7 +181,7 @@ textarea {
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 20px;
   cursor: pointer;
 }
 
@@ -192,7 +192,7 @@ textarea {
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 20px;
   cursor: pointer;
 }
 
