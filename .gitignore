@@ -1,48 +1,31 @@
-# Node modules (nie commitujemy zależności)
-node_modules/
- 
-# Pliki builda (generowane przez Vite/Webpack)
-dist/
-out/
-
-# Pliki tymczasowe, logi i cache
+# Logs
+logs
 *.log
-*.lock
-pnpm-lock.yaml
-yarn.lock
-package-lock.json
 npm-debug.log*
-yarn-error.log
+yarn-debug.log*
+yarn-error.log*
 pnpm-debug.log*
-.DS_Store
-Thumbs.db
+lerna-debug.log*
 
-# Pliki konfiguracyjne edytora
-.vscode/
-.idea/
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Pliki środowiskowe (sekrety i zmienne)
-.env
-.env.local
-.env.*.local
-
-# Cache narzędzi
-.npm/
-.pnp/
-.pnp.js
-.eslintcache
-
-# Pliki TypeScript, które są generowane
-tsconfig.tsbuildinfo
-
-# Pliki testowe i raporty
-coverage/
-*.lcov
-
-# Pliki CI/CD i DevOps
-/.github/workflows/
+*.tsbuildinfo
+*.env
