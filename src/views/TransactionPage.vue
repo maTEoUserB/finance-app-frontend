@@ -12,7 +12,7 @@
       </div>
 
       <TransactionCard
-          v-for="(tx, index) in filteredTransactions"
+          v-for="(tx, index) in visibleTransactions"
           :key="index"
           :transaction="tx"
           @delete="deleteTransaction(index)"
@@ -119,7 +119,7 @@ const getAllTransactions = async () => {
 }
 
 onMounted(() => {
-  getAllTransactions()
+  getAllTransactions();
 })
 
 const filters = ref({
@@ -131,27 +131,39 @@ const filters = ref({
   amountTo: null
 })
 
-const filteredTransactions = computed(() =>
-    transactions.value.filter(tx => {
-      const titleMatch = tx.transactionTitle.toLowerCase().includes(search.value.toLowerCase())
-      const categoryMatch =
-          filters.value.categories.length === 0 ||
-          filters.value.categories.includes(tx.category)
-      const typeMatch = !filters.value.type || tx.type === filters.value.type
-      const amountMatch =
-          (!filters.value.amountFrom || tx.amount >= filters.value.amountFrom) &&
-          (!filters.value.amountTo || tx.amount <= filters.value.amountTo)
-      const dateMatch =
-          (!filters.value.dateFrom || tx.transactionDate >= filters.value.dateFrom) &&
-          (!filters.value.dateTo || tx.transactionDate <= filters.value.dateTo)
+const applyFilter = async () => {
+  try {
+    const token = keycloak.token;
 
-      return titleMatch && categoryMatch && typeMatch && amountMatch && dateMatch
-    })
-)
+    const payload = {
+      //title: search.value,
+      categories: filters.value.categories,
+      type: filters.value.type,
+      amountFrom: filters.value.amountFrom,
+      amountTo: filters.value.amountTo,
+      dateFrom: filters.value.dateFrom,
+      dateTo: filters.value.dateTo
+    };
 
-const applyFilter = () => {
-  isFilterModalVisible.value = false
+    const res = await axios.post(`${API_URL}/transactions/filter`, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    transactions.value = res.data;
+    isFilterModalVisible.value = false;
+  } catch (err) {
+    console.error('Błąd filtrowania:', err);
+    alert('Nie udało się pobrać przefiltrowanych danych.');
+  }
 }
+
+const visibleTransactions = computed(() =>
+    transactions.value.filter(tx =>
+        tx.transactionTitle.toLowerCase().includes(search.value.toLowerCase())
+    )
+)
 
 const cancelFilter = () => {
   isFilterModalVisible.value = false
