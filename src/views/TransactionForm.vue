@@ -48,7 +48,7 @@
               <option value=11>Zdrowie/higiena</option>
               <option value=12>Edukacja</option>
               <option value=13>Rodzina</option>
-              <option value=24>Rozrywka</option>
+              <option value=14>Rozrywka</option>
               <!--              <option value=21>Inne</option>-->
             </select>
           </label>

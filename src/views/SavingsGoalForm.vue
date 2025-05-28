@@ -11,11 +11,6 @@
           <input type="text" v-model="savingsGoal.title" placeholder="Wpisz nazwę celu" required />
         </label>
 
-        <label>
-          Opis
-          <textarea v-model="savingsGoal.description" placeholder="Opisz swój cel"></textarea>
-        </label>
-
         <div class="amounts">
           <label>
             Ile już odłożyłeś?
@@ -48,7 +43,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import HeaderUser from '@/components/HeaderUser.vue'
 import { useRouter } from 'vue-router'
 import {keycloak} from "@/auth/keycloak.js";
@@ -59,7 +53,6 @@ const router = useRouter()
 
 const savingsGoal = {
   title: '',
-  description: '',
   currentAmount: 0.0,
   finalAmount: 0.0,
   deadline: ''
