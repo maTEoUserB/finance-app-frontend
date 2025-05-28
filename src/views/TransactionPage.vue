@@ -23,11 +23,11 @@
             <h3>Filtruj transakcje</h3>
 
             <label>Data od:
-              <input type="date" v-model="filters.dateFrom" />
+              <input type="date" v-model="filters.startDate" />
             </label>
 
             <label>Data do:
-              <input type="date" v-model="filters.dateTo" />
+              <input type="date" v-model="filters.endDate" />
             </label>
 
             <label>Kategorie:</label>
@@ -53,11 +53,11 @@
             </label>
 
             <label>Kwota od:
-              <input type="number" step="0.01" v-model.number="filters.amountFrom" />
+              <input type="number" step="0.01" v-model.number="filters.startAmount" />
             </label>
 
             <label>Kwota do:
-              <input type="number" step="0.01" v-model.number="filters.amountTo" />
+              <input type="number" step="0.01" v-model.number="filters.endAmount" />
             </label>
 
             <div class="modal-actions">
@@ -81,9 +81,10 @@ import {ref, computed, onMounted} from 'vue'
 import HeaderUser from '@/components/HeaderUser.vue'
 import TransactionCard from '@/components/TransactionCard.vue'
 import { useRouter } from 'vue-router'
-import {keycloak} from "@/auth/keycloak.js";
-import axios from "axios";
-import {API_URL} from "@/constants/const.js";
+import {keycloak} from "@/auth/keycloak.js"
+import axios from "axios"
+import {API_URL} from "@/constants/const.js"
+import qs from 'qs';
 
 const router = useRouter()
 
@@ -123,31 +124,32 @@ onMounted(() => {
 })
 
 const filters = ref({
-  dateFrom: '',
-  dateTo: '',
+  type: null,
   categories: [],
-  type: '',
-  amountFrom: null,
-  amountTo: null
+  startAmount: null,
+  endAmount: null,
+  startDate: null,
+  endDate: null
 })
 
 const applyFilter = async () => {
   try {
     const token = keycloak.token;
 
-    const payload = {
-      //title: search.value,
-      categories: filters.value.categories,
-      type: filters.value.type,
-      amountFrom: filters.value.amountFrom,
-      amountTo: filters.value.amountTo,
-      dateFrom: filters.value.dateFrom,
-      dateTo: filters.value.dateTo
-    };
-
-    const res = await axios.post(`${API_URL}/transactions/filter`, payload, {
+    const res = await axios.get(`${API_URL}/transactions/filter`, {
       headers: {
         Authorization: `Bearer ${token}`
+      },
+      params: {
+        type: filters.value.type,
+        categories: filters.value.categories,
+        startAmount: filters.value.startAmount,
+        endAmount: filters.value.endAmount,
+        startDate: filters.value.startDate,
+        endDate: filters.value.endDate
+      },
+      paramsSerializer: params => {
+        return qs.stringify(params, { arrayFormat: 'repeat' });
       }
     });
 
@@ -168,12 +170,12 @@ const visibleTransactions = computed(() =>
 const cancelFilter = () => {
   isFilterModalVisible.value = false
   filters.value = {
-    dateFrom: '',
-    dateTo: '',
+    type: null,
     categories: [],
-    type: '',
-    amountFrom: null,
-    amountTo: null
+    startAmount: null,
+    endAmount: null,
+    startDate: null,
+    endDate: null
   }
 }
 
