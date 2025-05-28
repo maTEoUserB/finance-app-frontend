@@ -14,6 +14,9 @@
           <li>📈 Średnie dzienne: <strong>{{ meanOfWeeklyExpenses }} PLN</strong></li>
           <li>🔄 Zmiana wydatków: <span class="green">{{ weeklyChange }}%</span></li>
         </ul>
+        <template #footer>
+          <router-link to="/analiza" class="more-button">Zobacz więcej</router-link>
+        </template>
       </Card>
 
       <Card title="KATEGORIE" icon="/kategorie.png" :showMoreButton="true">
