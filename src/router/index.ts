@@ -36,6 +36,11 @@ const initRouter = createRouter({
             path: '/oszczednosci',
             name: 'SavingsGoalPage',
             component: () => import('../views/SavingsGoalPage.vue')
+        },
+        {
+            path: '/analiza',
+            name: 'AnalysisPage',
+            component: () => import('../views/AnalysisPage.vue')
         }
     ],
 })
