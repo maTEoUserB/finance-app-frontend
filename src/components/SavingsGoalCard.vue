@@ -149,6 +149,7 @@ const setUpdateModalVisible = (savingsGoalId) => {
 const cancel = () => {
   isUpdateModalVisible.value = false
   goal.value = {
+    id: 0,
     title: '',
     currentAmount: 0.0,
     finalAmount: 0.0,
