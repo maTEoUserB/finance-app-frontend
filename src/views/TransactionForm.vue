@@ -33,23 +33,16 @@
 
           <label>
             Kategoria
-            <select v-model="transaction.categoryId" required>
+            <select
+                v-model="transaction.categoryId"
+                :disabled="categorySelectDisabled"
+                @click="handleCategoryClick"
+                required
+            >
               <option value="" disabled>Wybierz kategorię</option>
-              <option value=1>Pensja</option>
-              <option value=2>Zlecenia</option>
-              <option value=3>Dochody pasywne</option>
-              <option value=4>Akcje</option>
-              <option value=5>Stypendia</option>
-              <option value=6>Zasiłki</option>
-              <option value=7>Darowizny</option>
-              <option value=8>Rachunki/opłaty</option>
-              <option value=9>Żywność</option>
-              <option value=10>Transport</option>
-              <option value=11>Zdrowie/higiena</option>
-              <option value=12>Edukacja</option>
-              <option value=13>Rodzina</option>
-              <option value=14>Rozrywka</option>
-              <!--              <option value=21>Inne</option>-->
+              <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                {{ cat.name }}
+              </option>
             </select>
           </label>
         </div>
@@ -79,8 +72,12 @@ import {useRouter} from 'vue-router'
 import {API_URL} from '../constants/const.ts'
 import axios from 'axios'
 import {keycloak} from '../auth/keycloak';
+import { watch, ref, onMounted } from 'vue'
 
 const router = useRouter()
+
+const categories = ref([])
+const categorySelectDisabled = ref(true)
 
 const transaction = {
   transactionTitle: '',
@@ -91,6 +88,39 @@ const transaction = {
   transactionDate: ''
 }
 
+const handleCategoryClick = (event) => {
+  if (categorySelectDisabled.value) {
+    event.preventDefault()
+    alert('Najpierw określ typ transakcji')
+  }
+}
+
+watch(() => transaction.transactionType, async (newType) => {
+  if (!newType) {
+    categories.value = []
+    categorySelectDisabled.value = true
+    return
+  }
+
+  categorySelectDisabled.value = false
+
+  try {
+    const token = keycloak.token
+    const endpoint = newType === 'income' ? '/incomes/categories' : '/expenses/categories'
+
+    const res = await axios.get(`${API_URL}${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    categories.value = res.data
+  } catch (error) {
+    console.error('Błąd podczas pobierania kategorii:', error)
+    alert('Nie udało się pobrać kategorii.')
+    categories.value = []
+  }
+})
 
 const submitForm = async () => {
 
