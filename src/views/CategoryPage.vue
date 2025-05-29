@@ -42,7 +42,7 @@ const getAllCategories = async () => {
   try {
     const token = keycloak.token;
 
-    const res = await axios.get(`${API_URL}/income/categories/summary`, {
+    const res = await axios.get(`${API_URL}/expense/categories/summary`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

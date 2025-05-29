@@ -73,7 +73,7 @@ const submitForm = async () => {
     console.log('Pomyśnie dodano nowy cel oszczędnościowy: ', res.data)
     alert('Nowy cel oszczędnościowy został dodany.')
 
-    await router.push('/')
+    await router.push('/oszczednosci')
   } catch (err) {
     console.log('Błąd podczas dodawania celu oszczędnościowego: ', err)
 

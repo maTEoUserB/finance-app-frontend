@@ -4,6 +4,9 @@
       <div class="date-title">
         <span class="name">{{ category.categoryName }}</span>
       </div>
+      <div>
+        <p class="budget-amount">Ustawiony budżet: <strong>{{ category.budgetAmount }} PLN</strong></p>
+      </div>
     </div>
 
     <div class="right">
@@ -82,6 +85,11 @@ const cancel = () => {
 </script>
 
 <style scoped>
+.budget-amount {
+  font-size: 0.9rem;
+  color: #333;
+}
+
 .transaction-card {
   display: flex;
   justify-content: space-between;

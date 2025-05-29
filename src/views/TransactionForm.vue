@@ -107,7 +107,7 @@ const submitForm = async () => {
     console.log('Pomyśnie dodano nowa transakcję: ', res.data)
     alert('Nowa transakcja została dodana.')
 
-    await router.push('/')
+    await router.push('/transakcje')
   } catch (err) {
     console.log('Błąd podczas dodawania transakcji: ', err)
 
