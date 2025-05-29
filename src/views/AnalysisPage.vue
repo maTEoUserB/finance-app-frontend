@@ -9,7 +9,7 @@
         <!-- Pierwszy rząd -->
         <div class="card wide">
           <h3 class="card-title">Wydatki w ostatnich 7 dniach</h3>
-          <BarChart :data="weeklyExpensesData" :labels="weeklyExpensesLabels" />
+          <BarChart :data="lastWeekExpenses" :labels="weeklyExpensesLabels" />
         </div>
 
         <div class="card wide">
@@ -23,27 +23,27 @@
 
         <div class="card">
           <h3 class="card-title">Średnia kwota przychodów</h3>
-          <p class="big spaced">{{ averageIncome }} PLN</p>
+          <p class="big spaced">{{ meanOfWeeklyIncomes }} PLN</p>
         </div>
 
         <!-- Drugi rząd -->
         <div class="card">
           <h3 class="card-title">Zmiana wydatków</h3>
-          <p class="percent">{{ expenseChange }}</p>
+          <p class="percent">{{ weeklyChange }}</p>
           <p class="spaced-2">względem poprzedniego tyg.</p>
         </div>
 
         <div class="card wide">
           <h3 class="card-title">Liczba transakcji w tym tyg.</h3>
-          <p class="big">{{ transactionsThisWeek }}</p>
+          <p class="big">{{ numberOfWeeklyExpenses + numberOfWeeklyIncomes }}</p>
           <p>w tym</p>
           <div class="transaction-counts-row">
             <div class="count-item">
-              <span class="income big-number">{{ incomeCount }}</span>
+              <span class="income big-number">{{ numberOfWeeklyIncomes }}</span>
               <span>przychody</span>
             </div>
             <div class="count-item">
-              <span class="expense big-number">{{ expenseCount }}</span>
+              <span class="expense big-number">{{ numberOfWeeklyExpenses }}</span>
               <span>wydatki</span>
             </div>
           </div>
@@ -90,17 +90,17 @@ import { keycloak } from '@/auth/keycloak.js'
 
 const averageThisWeek = ref(0)
 const averageLastWeek = ref(0)
-const averageIncome = ref(0)
-const expenseChange = ref(0)
-const transactionsThisWeek = ref(0)
-const incomeCount = ref(0)
-const expenseCount = ref(0)
+const meanOfWeeklyIncomes = ref(0)
+const weeklyChange = ref(0)
+// const transactionsThisWeek = ref(0)
+const numberOfWeeklyIncomes = ref(0)
+const numberOfWeeklyExpenses = ref(0)
 const totalIncome = ref(0)
 const totalExpense = ref(0)
 const noExpenseDays = ref(0)
 const biggestExpense = ref({ title: '', date: '', amount: 0 })
-const weeklyExpensesData = ref([]) // do wykresu słupkowego
-const weeklyExpensesLabels = ref([]) // daty w formacie "DD.MM"
+const lastWeekExpenses = ref([]) // do wykresu słupkowego
+const weeklyExpensesLabels = ref([10]) // daty w formacie "DD.MM"
 
 const router = useRouter()
 
@@ -108,26 +108,28 @@ const getAnalysisData = async () => {
   try {
     const token = keycloak.token
 
-    const res = await axios.get(`${API_URL}/analytics`, {
+    const res = await axios.get(`${API_URL}/summary`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
 
     const data = res.data
-    averageThisWeek.value = data.averageThisWeek
-    averageLastWeek.value = data.averageLastWeek
-    averageIncome.value = data.averageIncome
-    expenseChange.value = data.expenseChange
-    transactionsThisWeek.value = data.transactionsThisWeek
-    incomeCount.value = data.incomeCount
-    expenseCount.value = data.expenseCount
-    totalIncome.value = data.totalIncome
-    totalExpense.value = data.totalExpense
-    noExpenseDays.value = data.noExpenseDays
-    biggestExpense.value = data.biggestExpense
-    weeklyExpensesData.value = data.weeklyExpensesData
-    weeklyExpensesLabels.value = data.weeklyExpensesLabels
+    // averageThisWeek.value = data.averageThisWeek
+    // averageLastWeek.value = data.averageLastWeek
+    meanOfWeeklyIncomes.value = data.meanOfWeeklyIncomes
+    weeklyChange.value = data.weeklyChange
+    // transactionsThisWeek.value = data.transactionsThisWeek
+    numberOfWeeklyIncomes.value = data.numberOfWeeklyIncomes
+    numberOfWeeklyExpenses.value = data.numberOfWeeklyExpenses
+    // totalIncome.value = data.totalIncome
+    // totalExpense.value = data.totalExpense
+    // noExpenseDays.value = data.noExpenseDays
+    // biggestExpense.value = data.biggestExpense
+    lastWeekExpenses.value = data.lastWeekExpenses
+    // weeklyExpensesLabels.value = data.weeklyExpensesLabels
+
+    console.log(data)
 
   } catch (error) {
     console.error('Błąd podczas pobierania danych analitycznych:', error)
@@ -137,7 +139,6 @@ const getAnalysisData = async () => {
 onMounted(() => {
   getAnalysisData()
 })
-
 </script>
 
 <style scoped>

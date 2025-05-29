@@ -12,7 +12,7 @@ const initKeycloak = (): Promise<Keycloak> => {
             .then(authenticated => {
                 if (authenticated) {
                     const token = keycloak.token;
-                    console.log('Token:', token); //późnij usuń (do testowania w postman)
+                    console.log('Token:', token); //później usuń (do testowania w postman)
 
                     // odświażanie tokena
                     setInterval(() => {
