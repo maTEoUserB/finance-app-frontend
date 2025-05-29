@@ -8,12 +8,12 @@
       <form @submit.prevent="submitForm" class="goal-form">
         <label>
           Nazwa
-          <input type="text" v-model="transaction.transactionTitle" placeholder="Wpisz nazwę" required/>
+          <input type="text" v-model="transaction.transactionTitle" placeholder="Wpisz nazwę (max 50 znaków)" required maxlength="50"/>
         </label>
 
         <label>
           Opis
-          <textarea v-model="transaction.transactionDescription" placeholder="Wpisz opis"></textarea>
+          <textarea v-model="transaction.transactionDescription" placeholder="Wpisz opis (max 300 znaków)" maxlength="300"></textarea>
         </label>
 
         <label>

@@ -12,7 +12,7 @@
         <ul class="analysis-stats">
           <li>💸 Wydatki w tym tygodniu: <strong>{{ weeklyExpenses }} PLN</strong></li>
           <li>📈 Średnie dzienne: <strong>{{ meanOfWeeklyExpenses }} PLN</strong></li>
-          <li>🔄 Zmiana wydatków: <span class="green">{{ weeklyChange }}%</span></li>
+          <li>🔄 Zmiana wydatków: <span :class="weeklyChange >= 0 ? 'red' : 'green'">{{ weeklyChange }}%</span></li>
         </ul>
         <template #footer>
           <router-link to="/analiza" class="more-button">Zobacz więcej</router-link>
@@ -25,7 +25,7 @@
             <span>
             {{ category.totalAmount }} PLN — {{ category.categoryName }}
             </span>
-            <span class="green">{{ Math.round(category.budgetProcent * 100) }}%</span>
+            <span :class="Math.round(category.budgetProcent * 100) > 100 ? 'red' : 'green'">{{ Math.round(category.budgetProcent * 100) }}%</span>
           </li>
         </ul>
         <template #footer>
@@ -49,7 +49,7 @@
               <img src="/not_check.png" alt="❌" class="status-icon"/>
               {{ obligation.dateToPay }} — {{ obligation.obligationTitle }}
             </span>
-            <span>{{ obligation.obligationAmount }} PLN</span>
+            <strong>{{ obligation.obligationAmount }} PLN</strong>
           </li>
         </ul>
       </Card>

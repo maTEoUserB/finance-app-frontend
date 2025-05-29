@@ -6,27 +6,20 @@
       <h2>Twój nowy termin płatności</h2>
 
       <form @submit.prevent="submitForm" class="goal-form">
-        <div class="two-columns">
-          <label>
-            Nazwa
-            <input type="text" v-model="obligation.title" placeholder="Wpisz nazwę" required />
-          </label>
+        <label>
+          Nazwa
+          <input type="text" v-model="obligation.title" placeholder="Wpisz nazwę (max 50 znaków)" required maxlength="50" />
+        </label>
 
-          <label>
-            Kategoria
-            <select v-model="obligation.categoryId" required>
-              <option value="" disabled>Wybierz kategorię</option>
-              <option value=8>Rachunki/opłaty</option>
-              <option value=9>Żywność</option>
-              <option value=10>Transport</option>
-              <option value=11>Zdrowie/higiena</option>
-              <option value=12>Edukacja</option>
-              <option value=13>Rodzina</option>
-              <option value=14>Rozrywka</option>
-<!--              <option value=>Inne</option>-->
-            </select>
-          </label>
-        </div>
+        <label>
+          Kategoria
+          <select v-model="obligation.categoryId" required>
+            <option value="" disabled>Wybierz kategorię</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+              {{ cat.name }}
+            </option>
+          </select>
+        </label>
 
         <label>
           Kwota
@@ -58,6 +51,9 @@ import { useRouter } from 'vue-router'
 import {keycloak} from "@/auth/keycloak.js";
 import axios from "axios";
 import {API_URL} from "@/constants/const.js";
+import { ref, onMounted } from 'vue'
+
+const categories = ref([])
 
 const router = useRouter()
 
@@ -97,6 +93,26 @@ const submitForm = async () => {
 const cancel = () => {
   router.push('/')
 }
+
+const fetchCategories = async () => {
+  try {
+    const token = keycloak.token
+
+    const res = await axios.get(`${API_URL}/expenses/categories`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    categories.value = res.data
+  } catch (err) {
+    console.error('Błąd podczas pobierania kategorii:', err)
+  }
+}
+
+onMounted(() => {
+  fetchCategories()
+})
 </script>
 
 <style scoped>
@@ -141,27 +157,6 @@ select {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-}
-
-.two-columns {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-@media (min-width: 640px) {
-  .two-columns {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .two-columns label {
-    flex: 1;
-  }
-
-  .two-columns label:first-child {
-    margin-right: 1rem;
-  }
 }
 
 .form-buttons {
