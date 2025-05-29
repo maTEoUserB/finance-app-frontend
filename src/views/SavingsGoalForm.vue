@@ -8,7 +8,7 @@
       <form @submit.prevent="submitForm" class="goal-form">
         <label>
           Nazwa
-          <input type="text" v-model="savingsGoal.title" placeholder="Wpisz nazwę celu" required />
+          <input type="text" v-model="savingsGoal.title" placeholder="Wpisz nazwę celu (max 50 znaków)" required maxlength="50" />
         </label>
 
         <div class="amounts">
