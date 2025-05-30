@@ -41,7 +41,7 @@
             >
               <option value="" disabled>Wybierz kategorię</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                {{ cat.name }}
+                {{ cat.categoryName }}
               </option>
             </select>
           </label>
@@ -72,21 +72,21 @@ import {useRouter} from 'vue-router'
 import {API_URL} from '../constants/const.ts'
 import axios from 'axios'
 import {keycloak} from '../auth/keycloak';
-import { watch, ref, onMounted } from 'vue'
+import { reactive, watch, ref, onMounted } from 'vue'
 
 const router = useRouter()
 
 const categories = ref([])
 const categorySelectDisabled = ref(true)
 
-const transaction = {
+const transaction = reactive({
   transactionTitle: '',
   transactionAmount: 0.0,
   transactionDescription: '',
   categoryId: 0,
   transactionType: '',
   transactionDate: ''
-}
+})
 
 const handleCategoryClick = (event) => {
   if (categorySelectDisabled.value) {

@@ -113,7 +113,7 @@ const search = ref('')
 const transactions = ref([])
 
 const isDeleteModalVisible = ref(false)
-const transactionIdToDelete = ref(null)
+const transactionIdToDelete = ref(0)
 
 const getAllTransactions = async () => {
   try {

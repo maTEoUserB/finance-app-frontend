@@ -212,6 +212,11 @@ onMounted(() => {
   font-weight: bold;
 }
 
+.red {
+  color: red;
+  font-weight: bold;
+}
+
 .blue {
   color: darkblue;
   font-weight: bold;
