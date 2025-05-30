@@ -57,12 +57,8 @@
           <p class="w-p">Wydatki stanowią {{ ((totalExpense / totalIncome) * 100).toFixed(1) }}% przychodów</p>
         </div>
 
-        <div class="card">
-          <h3 class="card-title">Liczba dni bez wydatków w tym tyg.</h3>
-          <p class="big">{{ noExpenseDays }}</p>
-        </div>
 
-        <div class="card">
+        <div class="card wide">
           <h3 class="card-title">Największy wydatek w tym tygodniu</h3>
           <p class="title-max">{{ biggestExpense.transactionTitle }}</p>
           <p class="date-max">{{ formatDate(biggestExpense.transactionDate) }}</p>
@@ -96,7 +92,6 @@ const numberOfWeeklyIncomes = ref(0)
 const numberOfWeeklyExpenses = ref(0)
 const totalIncome = ref(0)
 const totalExpense = ref(0)
-const noExpenseDays = ref(0)
 const biggestExpense = ref({ title: '', date: '', amount: 0 })
 const lastWeekExpenses = ref([])
 const labels = ref([])
@@ -125,7 +120,6 @@ const getAnalysisData = async () => {
     numberOfWeeklyExpenses.value = data.numberOfWeeklyExpenses
     totalIncome.value = data.totalIncome
     totalExpense.value = data.totalExpense
-    // noExpenseDays.value = data.noExpenseDays
     biggestExpense.value = data.biggestExpense
     lastWeekExpenses.value = data.lastWeekExpenses
     labels.value = lastWeekExpenses.value.map(item =>
