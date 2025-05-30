@@ -29,7 +29,7 @@
         <!-- Drugi rząd -->
         <div class="card">
           <h3 class="card-title">Zmiana wydatków</h3>
-          <p :class="['percent', weeklyChangeColor]">{{ weeklyChange }}</p>
+          <p :class="['percent', weeklyChangeColor]">{{ weeklyChange }} %</p>
           <p class="spaced-2">względem poprzedniego tyg.</p>
         </div>
 

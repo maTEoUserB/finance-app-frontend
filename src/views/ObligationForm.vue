@@ -16,7 +16,7 @@
           <select v-model="obligation.categoryId" required>
             <option value="" disabled>Wybierz kategorię</option>
             <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-              {{ cat.name }}
+              {{ cat.categoryName }}
             </option>
           </select>
         </label>

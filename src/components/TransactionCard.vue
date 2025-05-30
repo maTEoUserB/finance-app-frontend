@@ -9,7 +9,7 @@
     </div>
 
     <div class="right">
-      <p :class="transaction.type === 'income' ? 'amount income' : 'amount expense'">
+      <p :class="transaction.type === 'income' ? 'amount-income' : 'amount-expense'">
         {{ transaction.type === 'income' ? '+' : '-' }}{{ transaction.amount }} PLN
       </p>
       <p class="category">{{ transaction.category }}</p>
@@ -80,13 +80,13 @@ const formatDate = (dateString) => {
   gap: 0.4rem;
 }
 
-.amount income {
+.amount-income {
   font-size: 1.1rem;
   font-weight: bold;
   color: green;
 }
 
-.amount expense {
+.amount-expense {
   font-size: 1.1rem;
   font-weight: bold;
   color: red;
