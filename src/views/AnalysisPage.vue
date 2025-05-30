@@ -29,7 +29,7 @@
         <!-- Drugi rząd -->
         <div class="card">
           <h3 class="card-title">Zmiana wydatków</h3>
-          <p class="percent">{{ weeklyChange }}</p>
+          <p :class="['percent', weeklyChangeColor]">{{ weeklyChange }}</p>
           <p class="spaced-2">względem poprzedniego tyg.</p>
         </div>
 
@@ -80,7 +80,7 @@ import { useRouter } from 'vue-router'
 import BarChart from '@/components/BarChart.vue'
 import ScatterChart from '@/components/ScatterChart.vue'
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { API_URL } from '@/constants/const.js'
 import { keycloak } from '@/auth/keycloak.js'
 
@@ -115,7 +115,7 @@ const getAnalysisData = async () => {
     averageThisWeek.value = data.averageThisWeek
     averageLastWeek.value = data.averageLastWeek
     meanOfWeeklyIncomes.value = data.meanOfWeeklyIncomes
-    weeklyChange.value = data.weeklyChange
+    weeklyChange.value = data.weeklyChange?.toFixed(2) ?? '0.00'
     numberOfWeeklyIncomes.value = data.numberOfWeeklyIncomes
     numberOfWeeklyExpenses.value = data.numberOfWeeklyExpenses
     totalIncome.value = data.totalIncome
@@ -141,6 +141,13 @@ const formatDate = (dateString) => {
     year: 'numeric'
   })
 }
+
+const weeklyChangeColor = computed(() => {
+  const change = Number(weeklyChange.value ?? weeklyChange); // jeśli weeklyChange to ref
+  if (change > 0) return 'green-text';
+  if (change < 0) return 'red-text';
+  return '';
+});
 
 onMounted(() => {
   getAnalysisData()
@@ -178,6 +185,14 @@ h2 {
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
 }
 
 .kwota-1 {

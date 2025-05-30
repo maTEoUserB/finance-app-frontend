@@ -15,7 +15,7 @@
           v-for="(tx, index) in visibleTransactions"
           :key="index"
           :transaction="tx"
-          @delete="deleteTransaction(index)"
+          @delete="confirmDelete(tx.id)"
       />
       <teleport to="body">
         <div v-if="isFilterModalVisible" class="modal-overlay">
@@ -67,6 +67,18 @@
           </div>
         </div>
       </teleport>
+      <teleport to="body">
+        <div v-if="isDeleteModalVisible" class="modal-overlay">
+          <div class="modal">
+            <h3>Potwierdź usunięcie</h3>
+            <p>Czy na pewno chcesz trwale usunąć tę transakcję?</p>
+            <div class="modal-actions">
+              <button class="wyczysc-modal-button" @click="cancelDelete">Anuluj</button>
+              <button class="zastosuj-modal-button" @click="deleteTransaction">Usuń</button>
+            </div>
+          </div>
+        </div>
+      </teleport>
     </main>
 
     <footer class="footer">
@@ -99,6 +111,9 @@ const allCategories = [
 const search = ref('')
 
 const transactions = ref([])
+
+const isDeleteModalVisible = ref(false)
+const transactionIdToDelete = ref(null)
 
 const getAllTransactions = async () => {
   try {
@@ -179,8 +194,35 @@ const cancelFilter = () => {
   }
 }
 
-const deleteTransaction = (index) => {
-  transactions.value.splice(index, 1)
+const deleteTransaction = async () => {
+  try {
+    const token = keycloak.token;
+    const id = transactionIdToDelete.value;
+
+    await axios.delete(`${API_URL}/transaction/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    transactions.value = transactions.value.filter(tx => tx.id !== id);
+
+    isDeleteModalVisible.value = false;
+    transactionIdToDelete.value = null;
+  } catch (err) {
+    console.error('Błąd usuwania transakcji:', err);
+    alert('Nie udało się usunąć transakcji.');
+  }
+}
+
+const confirmDelete = (id) => {
+  transactionIdToDelete.value = id
+  isDeleteModalVisible.value = true
+}
+
+const cancelDelete = () => {
+  isDeleteModalVisible.value = false
+  transactionIdToDelete.value = null
 }
 </script>
 
