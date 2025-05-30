@@ -11,7 +11,7 @@
       </div>
 
       <CategoryCard
-          v-for="(ct, index) in categories"
+          v-for="(ct, index) in filteredCategories"
           :key="index"
           :category="ct"
       />
@@ -32,6 +32,13 @@ import {keycloak} from "@/auth/keycloak.js";
 import axios from "axios";
 import {API_URL} from "@/constants/const.js";
 import CategoryCard from "@/components/CategoryCard.vue";
+import { computed } from 'vue'
+
+const filteredCategories = computed(() =>
+    categories.value.filter(ct =>
+        ct.categoryName.toLowerCase().includes(search.value.toLowerCase())
+    )
+)
 
 const router = useRouter()
 const search = ref('')
