@@ -12,7 +12,7 @@
     <div class="right">
       <p class="expense">- {{ category.totalAmount }} PLN</p>
       <p class="green">{{  Math.round(category.budgetProcent * 100) }}%</p>
-      <button class="set-button" @click="setBudgetModalVisible(category.categoryName)">Ustaw budżet</button>
+      <button class="set-button" @click="setBudgetModalVisible(category.categoryId)">Ustaw budżet</button>
     </div>
 
     <teleport to="body">
@@ -47,7 +47,7 @@ defineProps({
 
 const isBudgetModalVisible = ref(false)
 const budget = ref({
-  categoryName: '',
+  categoryId: 0,
   amountLimit: 0.0
 })
 
@@ -70,15 +70,15 @@ const setBudget = async () => {
   }
 }
 
-const setBudgetModalVisible = (categoryName) => {
-  budget.value.categoryName = categoryName
+const setBudgetModalVisible = (categoryId) => {
+  budget.value.categoryId = categoryId
   isBudgetModalVisible.value = true
 }
 
 const cancel = () => {
   isBudgetModalVisible.value = false
   budget.value = {
-    categoryName: '',
+    categoryId: 0,
     amountLimit: 0.0
   }
 }
