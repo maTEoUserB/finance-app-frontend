@@ -9,7 +9,7 @@
         <!-- Pierwszy rząd -->
         <div class="card wide">
           <h3 class="card-title">Wydatki w ostatnich 7 dniach</h3>
-          <BarChart :data="lastWeekExpenses" :labels="weeklyExpensesLabels" />
+          <BarChart :data="amounts" :labels="labels"/>
         </div>
 
         <div class="card wide">
@@ -57,16 +57,12 @@
           <p class="w-p">Wydatki stanowią {{ ((totalExpense / totalIncome) * 100).toFixed(1) }}% przychodów</p>
         </div>
 
-        <div class="card">
-          <h3 class="card-title">Liczba dni bez wydatków w tym tyg.</h3>
-          <p class="big">{{ noExpenseDays }}</p>
-        </div>
 
-        <div class="card">
+        <div class="card wide">
           <h3 class="card-title">Największy wydatek w tym tygodniu</h3>
-          <p class="title-max">{{ biggestExpense.title }}</p>
-          <p class="date-max">{{ biggestExpense.date }}</p>
-          <p class="max-wydatek">-{{ biggestExpense.amount }} PLN</p>
+          <p class="title-max">{{ biggestExpense.transactionTitle }}</p>
+          <p class="date-max">{{ formatDate(biggestExpense.transactionDate) }}</p>
+          <p class="max-wydatek">-{{ biggestExpense.transactionAmount }} PLN</p>
         </div>
       </div>
     </main>
@@ -92,15 +88,14 @@ const averageThisWeek = ref(0)
 const averageLastWeek = ref(0)
 const meanOfWeeklyIncomes = ref(0)
 const weeklyChange = ref(0)
-// const transactionsThisWeek = ref(0)
 const numberOfWeeklyIncomes = ref(0)
 const numberOfWeeklyExpenses = ref(0)
 const totalIncome = ref(0)
 const totalExpense = ref(0)
-const noExpenseDays = ref(0)
 const biggestExpense = ref({ title: '', date: '', amount: 0 })
-const lastWeekExpenses = ref([]) // do wykresu słupkowego
-const weeklyExpensesLabels = ref([10]) // daty w formacie "DD.MM"
+const lastWeekExpenses = ref([])
+const labels = ref([])
+const amounts = ref([])
 
 const router = useRouter()
 
@@ -114,26 +109,37 @@ const getAnalysisData = async () => {
       }
     })
 
-    const data = res.data
-    // averageThisWeek.value = data.averageThisWeek
-    // averageLastWeek.value = data.averageLastWeek
+    let data = res.data
+    console.log(data)
+
+    averageThisWeek.value = data.averageThisWeek
+    averageLastWeek.value = data.averageLastWeek
     meanOfWeeklyIncomes.value = data.meanOfWeeklyIncomes
     weeklyChange.value = data.weeklyChange
-    // transactionsThisWeek.value = data.transactionsThisWeek
     numberOfWeeklyIncomes.value = data.numberOfWeeklyIncomes
     numberOfWeeklyExpenses.value = data.numberOfWeeklyExpenses
-    // totalIncome.value = data.totalIncome
-    // totalExpense.value = data.totalExpense
-    // noExpenseDays.value = data.noExpenseDays
-    // biggestExpense.value = data.biggestExpense
+    totalIncome.value = data.totalIncome
+    totalExpense.value = data.totalExpense
+    biggestExpense.value = data.biggestExpense
     lastWeekExpenses.value = data.lastWeekExpenses
-    // weeklyExpensesLabels.value = data.weeklyExpensesLabels
+    labels.value = lastWeekExpenses.value.map(item =>
+        new Date(item.dateLabel).toLocaleDateString("pl-PL", { weekday: "short", day: "numeric" })
+    );
+    amounts.value = lastWeekExpenses.value.map(item => item.totalAmount);
 
-    console.log(data)
 
   } catch (error) {
     console.error('Błąd podczas pobierania danych analitycznych:', error)
   }
+}
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
 }
 
 onMounted(() => {
