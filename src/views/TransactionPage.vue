@@ -151,6 +151,9 @@ const applyFilter = async () => {
   try {
     const token = keycloak.token;
 
+    console.log('Filters: ', filters.value)
+
+
     const res = await axios.get(`${API_URL}/transactions/filter`, {
       headers: {
         Authorization: `Bearer ${token}`
