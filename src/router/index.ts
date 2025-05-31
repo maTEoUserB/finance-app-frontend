@@ -41,7 +41,13 @@ const initRouter = createRouter({
             path: '/analiza',
             name: 'AnalysisPage',
             component: () => import('../views/AnalysisPage.vue')
+        },
+        {
+            path: '/kalendarz',
+            name: 'CalendarPage',
+            component: () => import('../views/CalendarPage.vue')
         }
+
     ],
 })
 

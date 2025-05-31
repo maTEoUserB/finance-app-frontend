@@ -52,6 +52,9 @@
             <strong>{{ obligation.obligationAmount }} PLN</strong>
           </li>
         </ul>
+        <template #footer>
+          <router-link to="/kalendarz" class="more-button">Zobacz więcej</router-link>
+        </template>
       </Card>
 
       <Card title="OSTATNIE TRANSAKCJE" icon="/transakcje.png" :showMoreButton="true">
