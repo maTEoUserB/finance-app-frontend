@@ -12,7 +12,7 @@
         </div>
         <div class="right-buttons">
           <button @click="logout" class="btn filled">Wyloguj</button>
-          <button class="btn filled">Moje konto</button>
+          <button class="btn filled" @click="goToAccount">Moje konto</button>
         </div>
       </div>
     </div>
@@ -24,8 +24,12 @@ import {keycloak} from "../auth/keycloak.js";
 
 const logout = () => {
   keycloak.logout({
-    redirectUri: window.location.origin
+    redirectUri: 'http://localhost:5173/start'
   });
+};
+
+const goToAccount = () => {
+  window.location.href = keycloak.createAccountUrl({ redirectUri: 'http://localhost:5173/' })
 };
 </script>
 
