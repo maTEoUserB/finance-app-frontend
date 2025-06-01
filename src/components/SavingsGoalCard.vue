@@ -5,6 +5,7 @@
         <span class="name">{{ savingsGoal.title }}</span>
       </div>
       <p class="date">📅Deadline {{ formatDate(savingsGoal.deadline) }}</p>
+      <p class="percent">Zaoszczędziłeś już <strong>{{ ((savingsGoal.currentAmount/savingsGoal.finalAmmount)*100).toFixed(2) }}%.</strong></p>
     </div>
 
     <div class="right">
@@ -173,6 +174,7 @@ const cancel = () => {
   padding: 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  min-width: 800px;
 }
 
 .left {
@@ -185,6 +187,10 @@ const cancel = () => {
   gap: 1rem;
   align-items: center;
   margin-bottom: 0.3rem;
+}
+
+.percent {
+  margin-top: 2rem;
 }
 
 .modal-overlay {

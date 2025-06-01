@@ -29,7 +29,7 @@
         <!-- Drugi rząd -->
         <div class="card">
           <h3 class="card-title">Zmiana wydatków</h3>
-          <p :class="['percent', weeklyChangeColor]">{{ weeklyChange }} %</p>
+          <p :class="weeklyChange >= 0 ? 'red-text' : 'green-text'">{{ weeklyChange > 0 ? '+' : '' }}{{ weeklyChange }} %</p>
           <p class="spaced-2">względem poprzedniego tyg.</p>
         </div>
 
@@ -54,7 +54,7 @@
           <p class="kwota-1"><strong>{{ totalIncome }} PLN</strong></p>
           <p class="kwota_wyd">Kwota wydatków:</p>
           <p class="kwota-2"><strong>{{ totalExpense }} PLN</strong></p>
-          <p class="w-p">Wydatki stanowią {{ ((totalExpense / totalIncome) * 100).toFixed(1) }}% przychodów</p>
+          <p class="w-p">Wydatki stanowią <strong>{{ ((totalExpense / totalIncome) * 100).toFixed(2) }}%</strong> przychodów</p>
         </div>
 
 
@@ -112,14 +112,14 @@ const getAnalysisData = async () => {
     let data = res.data
     console.log(data)
 
-    averageThisWeek.value = data.averageThisWeek
-    averageLastWeek.value = data.averageLastWeek
-    meanOfWeeklyIncomes.value = data.meanOfWeeklyIncomes
+    averageThisWeek.value = data.averageThisWeek?.toFixed(2) ?? '0.00'
+    averageLastWeek.value = data.averageLastWeek?.toFixed(2) ?? '0.00'
+    meanOfWeeklyIncomes.value = data.meanOfWeeklyIncomes?.toFixed(2) ?? '0.00'
     weeklyChange.value = data.weeklyChange?.toFixed(2) ?? '0.00'
     numberOfWeeklyIncomes.value = data.numberOfWeeklyIncomes
     numberOfWeeklyExpenses.value = data.numberOfWeeklyExpenses
-    totalIncome.value = data.totalIncome
-    totalExpense.value = data.totalExpense
+    totalIncome.value = data.totalIncome?.toFixed(2) ?? '0.00'
+    totalExpense.value = data.totalExpense?.toFixed(2) ?? '0.00'
     biggestExpense.value = data.biggestExpense
     lastWeekExpenses.value = data.lastWeekExpenses
     labels.value = lastWeekExpenses.value.map(item =>
@@ -143,9 +143,9 @@ const formatDate = (dateString) => {
 }
 
 const weeklyChangeColor = computed(() => {
-  const change = Number(weeklyChange.value ?? weeklyChange); // jeśli weeklyChange to ref
-  if (change > 0) return 'green-text';
-  if (change < 0) return 'red-text';
+  const change = Number(weeklyChange.value ?? weeklyChange);
+  if (change < 0) return 'green-text';
+  if (change > 0) return 'red-text';
   return '';
 });
 
@@ -188,20 +188,28 @@ h2 {
 }
 
 .green-text {
+  font-size: 2rem;
+  font-weight: bold;
   color: green;
+  margin-top: 1rem;
 }
 
 .red-text {
+  font-size: 2rem;
+  font-weight: bold;
   color: red;
+  margin-top: 1rem;
 }
 
 .kwota-1 {
   font-size: 1.5rem;
   margin-top: -1rem;
+  color: green;
 }
 
 .kwota-2 {
   font-size: 1.5rem;
+  color: red;
 }
 
 .w-p {
@@ -276,13 +284,6 @@ h2 {
   margin-top: 2rem;
 }
 
-.percent {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #d00;
-  margin-top: 1rem;
-}
-
 .income {
   color: green;
   font-weight: bold;
@@ -303,10 +304,12 @@ h2 {
 
 .title-max {
   font-size: 1.25rem;
+  color: #1e0f55;
 }
 
 .date-max {
   font-size: 1.25rem;
+  font-style: italic;
 }
 
 .avg-values {

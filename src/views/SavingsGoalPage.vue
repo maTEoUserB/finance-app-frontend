@@ -11,7 +11,7 @@
       </div>
 
       <SavingsGoalCard
-          v-for="(sg, index) in savingsGoals"
+          v-for="(sg, index) in filteredSavingsGoals"
           :key="index"
           :savingsGoal="sg"
       />
@@ -32,6 +32,13 @@ import {keycloak} from "@/auth/keycloak.js";
 import axios from "axios";
 import {API_URL} from "@/constants/const.js";
 import SavingsGoalCard from "@/components/SavingsGoalCard.vue";
+import { computed } from 'vue'
+
+const filteredSavingsGoals = computed(() =>
+    savingsGoals.value.filter(sg =>
+        sg.title.toLowerCase().includes(search.value.toLowerCase())
+    )
+)
 
 const router = useRouter()
 const search = ref('')

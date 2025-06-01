@@ -23,7 +23,7 @@
         <ul class="category-list">
           <li v-for="(category, index) in categories" :key="index">
             <span>
-            {{ category.totalAmount }} PLN — {{ category.categoryName }}
+            {{ Number(category.totalAmount).toFixed(2) }} PLN — {{ category.categoryName }}
             </span>
             <span :class="Math.round(category.budgetProcent * 100) > 100 ? 'red' : 'green'">{{ Math.round(category.budgetProcent * 100) }}%</span>
           </li>
@@ -52,6 +52,9 @@
             <strong>{{ obligation.obligationAmount }} PLN</strong>
           </li>
         </ul>
+        <template #footer>
+          <router-link to="/kalendarz" class="more-button">Zobacz więcej</router-link>
+        </template>
       </Card>
 
       <Card title="OSTATNIE TRANSAKCJE" icon="/transakcje.png" :showMoreButton="true">
@@ -63,7 +66,7 @@
                  {{ transaction.transactionTitle }}
               </strong>
             </span>
-            <span class="blue">{{ transaction.amount }}  PLN</span>
+            <span class="blue">{{ (transaction.amount) }}  PLN</span>
           </li>
         </ul>
         <template #footer>
