@@ -81,12 +81,12 @@ const submitForm = async () => {
       console.log('STATUS:', err.response?.status)
       console.log('DATA:', err.response?.data)
     }
-    await router.push('/')
+    await router.push('/home')
   }
 }
 
 const cancel = () => {
-  router.push('/')
+  router.push('/home')
 }
 </script>
 

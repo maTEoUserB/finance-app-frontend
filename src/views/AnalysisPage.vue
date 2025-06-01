@@ -3,7 +3,7 @@
     <HeaderUser />
     <main class="main-content">
       <h2>Analiza Twoich finansów</h2>
-      <button class="back-button" @click="router.push('/')">Wróć na stronę główną</button>
+      <button class="back-button" @click="router.push('/home')">Wróć na stronę główną</button>
 
       <div class="grid">
         <!-- Pierwszy rząd -->

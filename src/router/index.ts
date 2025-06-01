@@ -6,12 +6,12 @@ const initRouter = createRouter({
     routes: [
 
         {
-            path:'/start',
+            path:'/',
             name: 'start',
             component: () => import('../views/StartPage.vue'),
         },
         {
-            path: '/', name: 'home',
+            path: '/home', name: 'home',
             component: () => import('../views/MainPage.vue'),
             meta: { requiresAuth: true }
         },

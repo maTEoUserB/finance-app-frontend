@@ -24,12 +24,12 @@ import {keycloak} from "../auth/keycloak.js";
 
 const logout = () => {
   keycloak.logout({
-    redirectUri: 'http://localhost:5173/start'
+    redirectUri: 'http://localhost:5173/'
   });
 };
 
 const goToAccount = () => {
-  window.location.href = keycloak.createAccountUrl({ redirectUri: 'http://localhost:5173/' })
+  window.location.href = keycloak.createAccountUrl({ redirectUri: 'http://localhost:5173/home' })
 };
 </script>
 

@@ -22,7 +22,7 @@ import {keycloak} from "../auth/keycloak.js";
 
 const login = () => {
   keycloak.login({
-    redirectUri: 'http://localhost:5173/'
+    redirectUri: 'http://localhost:5173/home'
   });
 };
 </script>
