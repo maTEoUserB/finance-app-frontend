@@ -8,7 +8,7 @@
       <div class="filter-section">
         <input type="text" v-model="search" placeholder="Podaj tytuł transakcji" />
         <button @click="isFilterModalVisible = true">Filtruj</button>
-        <button class="back-button" @click="router.push('/')">Wróć na stronę główną</button>
+        <button class="back-button" @click="router.push('/home')">Wróć na stronę główną</button>
       </div>
 
       <TransactionCard

@@ -12,7 +12,7 @@
         <button :class="{ active: activeTab === 'paid' }" @click="activeTab = 'paid'">
           Zapłacone
         </button>
-        <button class="back-button" @click="router.push('/')">Wróć na stronę główną</button>
+        <button class="back-button" @click="router.push('/home')">Wróć na stronę główną</button>
       </div>
 
       <div v-if="activeTab === 'notPaid' || activeTab === 'paid'" class="search-bar">

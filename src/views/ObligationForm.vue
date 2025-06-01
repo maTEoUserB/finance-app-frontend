@@ -78,7 +78,7 @@ const submitForm = async () => {
     console.log('Pomyśnie dodano nowy termin płatności: ', res.data)
     alert('Nowy termin płatności został dodany.')
 
-    await router.push('/')
+    await router.push('/kalendarz')
   } catch (err) {
     console.log('Błąd podczas dodawania terminu płatności: ', err)
 
@@ -86,12 +86,12 @@ const submitForm = async () => {
       console.log('STATUS:', err.response?.status)
       console.log('DATA:', err.response?.data)
     }
-    await router.push('/')
+    await router.push('/home')
   }
 }
 
 const cancel = () => {
-  router.push('/')
+  router.push('/home')
 }
 
 const fetchCategories = async () => {
