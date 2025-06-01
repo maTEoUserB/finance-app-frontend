@@ -195,6 +195,7 @@ const cancelFilter = () => {
     startDate: null,
     endDate: null
   }
+  applyFilter()
 }
 
 const deleteTransaction = async () => {

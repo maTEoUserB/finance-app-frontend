@@ -8,7 +8,7 @@ const keycloak = new Keycloak({
 
 const initKeycloak = (): Promise<Keycloak> => {
     return new Promise((resolve, reject) => {
-        keycloak.init({ onLoad: 'login-required', checkLoginIframe: false })
+        keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false })
             .then(authenticated => {
                 if (authenticated) {
                     const token = keycloak.token;
@@ -20,11 +20,8 @@ const initKeycloak = (): Promise<Keycloak> => {
                             console.error('Failed to refresh token');
                         });
                     }, 10000);
-
-                    resolve(keycloak);
-                } else {
-                    reject(new Error('Not authenticated'));
                 }
+                resolve(keycloak);
             })
             .catch(error => reject(error));
     });

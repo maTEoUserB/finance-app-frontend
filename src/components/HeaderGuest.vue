@@ -18,6 +18,13 @@
 </template>
 
 <script setup>
+import {keycloak} from "../auth/keycloak.js";
+
+const login = () => {
+  keycloak.login({
+    redirectUri: 'http://localhost:5173/'
+  });
+};
 </script>
 
 <style scoped>
