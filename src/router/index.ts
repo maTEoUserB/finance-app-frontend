@@ -62,6 +62,12 @@ const initRouter = createRouter({
             name: 'CalendarPage',
             component: () => import('../views/CalendarPage.vue'),
             meta: { requiresAuth: true }
+        },
+        {
+            path: '/ustaw-saldo',
+            name: 'SaldoPage',
+            component: () => import('../views/SaldoPage.vue'),
+            meta: { requiresAuth: true }
         }
 
     ],
