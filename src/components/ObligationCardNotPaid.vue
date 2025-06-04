@@ -1,19 +1,47 @@
 <template>
   <div class="obligation-card not-paid">
     <div class="info">
-      <span class="date">{{ obligation.date }}</span>
-      <span class="title">{{ obligation.title }}</span>
-      <span class="amount">{{ obligation.amount }} PLN</span>
-      <span class="category">{{ obligation.category }}</span>
+      <span class="date">{{ props.obligation.dateToPay }}</span>
+      <span class="title">{{ props.obligation.obligationTitle }}</span>
+      <span class="amount">{{ props.obligation.obligationAmount }} PLN</span>
+      <span class="category">{{ props.obligation.categoryName }}</span>
     </div>
-    <button class="mark-button">Zapłacono</button>
+    <button class="mark-button" @click="letPaid">Zapłacono</button>
   </div>
 </template>
 
 <script setup>
-defineProps({
-  obligation: Object
+import {keycloak} from "@/auth/keycloak.js";
+import axios from "axios";
+import {API_URL} from "@/constants/const.js";
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
+
+const props = defineProps({
+  obligation: Object,
+  refreshObligations: Function
 })
+
+const letPaid = async () => {
+  try {
+    const token = keycloak.token;
+
+    const res = await axios.post(`${API_URL}/update/obligation/${props.obligation.id}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log(res.data)
+
+    alert('Pomyślnie zaaktualizowano termin płatności.')
+    await props.refreshObligations();
+    await router.push('/kalendarz')
+  } catch (err) {
+    console.error('Błąd podczas aktualizacji terminu płatności:', err)
+    alert('Błąd podczas aktualizacji terminu płatności.')
+  }
+}
 </script>
 
 <style scoped>

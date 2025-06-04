@@ -1,17 +1,17 @@
 <template>
   <div class="obligation-card paid">
     <div class="info">
-      <span class="date">{{ obligation.date }}</span>
-      <span class="title">{{ obligation.title }}</span>
-      <span class="amount">{{ obligation.amount }} PLN</span>
-      <span class="category">{{ obligation.category }}</span>
+      <span class="date">{{ props.obligation.dateToPay }}</span>
+      <span class="title">{{ props.obligation.obligationTitle }}</span>
+      <span class="amount">{{ props.obligation.obligationAmount }} PLN</span>
+      <span class="category">{{ props.obligation.categoryName }}</span>
     </div>
     <img src="/check.png" alt="check" class="check-icon" />
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   obligation: Object
 })
 </script>

@@ -30,6 +30,7 @@
               v-for="(item, index) in filteredUnpaid"
               :key="index"
               :obligation="item"
+              :refreshObligations="getAllObligations"
           />
           <ObligationCardPaid
               v-if="activeTab === 'paid'"
@@ -53,38 +54,58 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
 import HeaderUser from '@/components/HeaderUser.vue'
 import ObligationCardPaid from '@/components/ObligationCardPaid.vue'
 import ObligationCardNotPaid from '@/components/ObligationCardNotPaid.vue'
 import Calendar from '@/components/Calendar.vue'
+import {keycloak} from "@/auth/keycloak.js";
+import axios from "axios";
+import {API_URL} from "@/constants/const.js";
 
 const router = useRouter()
 const activeTab = ref('notPaid')
 const searchQuery = ref('')
 
-const unpaid = [
-  { title: 'Rachunek za gaz', date: '2025-06-09', amount: '150', category: 'Rachunki/opłaty' },
-  { title: 'Rachunek za prąd', date: '2025-06-12', amount: '200', category: 'Rachunki/opłaty' }
-]
+const unpaid = ref([])
+const paid = ref([])
 
-const paid = [
-  { title: 'Rachunek za internet', date: '2025-05-10', amount: '100', category: 'Rachunki/opłaty' },
-  { title: 'Rachunek za wodę', date: '2025-05-05', amount: '80', category: 'Rachunki/opłaty' }
-]
+const getAllObligations = async () => {
+  try {
+    const token = keycloak.token;
+
+    const res = await axios.get(`${API_URL}/obligations`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log(res.data)
+
+    unpaid.value = res.data.unpaidObligations
+    paid.value = res.data.paidObligations
+
+  } catch (err) {
+    console.error('Błąd podczas pobierania danych:', err)
+    alert('Błąd podczas pobierania danych.')
+  }
+}
 
 const filteredUnpaid = computed(() =>
-    unpaid.filter(item =>
-        item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    unpaid.value.filter(item =>
+        item.obligationTitle.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
 )
 
 const filteredPaid = computed(() =>
-    paid.filter(item =>
-        item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    paid.value.filter(item =>
+        item.obligationTitle.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
 )
+
+onMounted(() => {
+  getAllObligations();
+})
 </script>
 
 <style scoped>
