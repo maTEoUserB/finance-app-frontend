@@ -6,8 +6,12 @@
       </div>
       <div class="buttons">
         <div class="left-buttons">
-          <button class="btn ghost">O nas</button>
-          <button class="btn ghost">Funkcjonalności</button>
+          <router-link
+              to="/informacje"
+              :class="['btn', 'ghost', { active: route.path === '/informacje' }]"
+          >
+            O nas
+          </router-link>
         </div>
         <div class="right-buttons">
           <button class="btn filled" @click="login">Zaloguj się</button>
@@ -18,7 +22,10 @@
 </template>
 
 <script setup>
-import {keycloak} from "../auth/keycloak.js";
+import { useRoute } from 'vue-router'
+import { keycloak } from '../auth/keycloak.js'
+
+const route = useRoute()
 
 const login = () => {
   keycloak.login({
@@ -42,7 +49,7 @@ const login = () => {
 
 .container {
   width: 100%;
-  max-width: 1200px; /* możesz zmienić np. na 1440px */
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -73,7 +80,7 @@ const login = () => {
   border: none;
   border-radius: 999px;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 
@@ -87,11 +94,18 @@ const login = () => {
   background: #180555;
   color: white;
   font-weight: normal;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
+  text-decoration: none;
 }
 
 .btn.filled {
   background: #5118fd;
   color: white;
+}
+
+.btn.ghost.active {
+  color: #2EC0FB;
+  text-decoration: underline;
+  background: transparent;
 }
 </style>
