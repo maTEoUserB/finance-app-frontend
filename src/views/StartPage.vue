@@ -6,8 +6,8 @@
       <section class="left">
         <img src="/ZeniVault_napis.png" alt="ZeniVault" class="logo-text" />
         <p class="subtitle">Kontroluj z nami swoje finanse</p>
-        <input type="email" placeholder="twojnickname12345" class="nick-input" />
-        <button class="start-button">Zacznij teraz</button>
+        <input type="text" v-model="username" placeholder="twojnickname" class="nick-input" />
+        <button class="start-button" @click="login">Zacznij teraz</button>
       </section>
 
       <section class="right">
@@ -24,6 +24,17 @@
 
 <script setup>
 import HeaderGuest from '@/components/HeaderGuest.vue'
+import {keycloak} from "@/auth/keycloak.js";
+import {ref} from "vue";
+
+const username = ref()
+
+const login = () => {
+  keycloak.login({
+    redirectUri: 'http://localhost:5173/home',
+    loginHint: username.value
+  });
+};
 </script>
 
 <style scoped>

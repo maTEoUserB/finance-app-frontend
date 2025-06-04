@@ -26,7 +26,7 @@
 
           <div class="modal-actions">
             <button class="wyczysc-modal-button" @click="cancel">Anuluj</button>
-            <button class="zastosuj-modal-button" @click="setBudget">Ustaw</button>
+            <button class="zastosuj-modal-button" @click="setBudget">Ustaw budżet</button>
           </div>
         </div>
       </div>
