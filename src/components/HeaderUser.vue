@@ -48,7 +48,7 @@ const goToAccount = () => {
 
 .container {
   width: 100%;
-  max-width: 1200px; /* możesz zmienić np. na 1440px */
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
