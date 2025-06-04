@@ -6,6 +6,7 @@
       <Card title="MOJE SALDO" icon="/moje_saldo.png">
         <p class="value">{{ saldo }} PLN</p>
         <p class="converted">➡ {{ euroSaldo }} EUR</p>
+        <p class="converted">➡ {{ usdSaldo }} USD</p>
       </Card>
 
       <Card title="ANALIZA" icon="/analiza.png" :showMoreButton="true">
@@ -102,6 +103,7 @@ const formattedDate = today.toLocaleDateString('pl-PL', {
 
 const saldo = ref(0)
 const euroSaldo = ref(0)
+const usdSaldo = ref(0)
 const weeklyExpenses = ref(0)
 const meanOfWeeklyExpenses = ref(0)
 const weeklyChange = ref(0)
@@ -129,6 +131,7 @@ const getMainInformation = async () => {
     }else{
       saldo.value = data.saldo?.toFixed(2) ?? '0.00'
       euroSaldo.value = data.euroSaldo?.toFixed(2) ?? '0.00'
+      usdSaldo.value = data.usdSaldo?.toFixed(2) ?? '0.00'
       weeklyExpenses.value = data.weeklyExpenses?.toFixed(2) ?? '0.00'
       weeklyChange.value = data.weeklyChange?.toFixed(2) ?? '0.00'
       meanOfWeeklyExpenses.value = data.meanOfWeeklyExpenses?.toFixed(2) ?? '0.00'

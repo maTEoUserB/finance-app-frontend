@@ -22,7 +22,7 @@
         </div>
 
         <div class="card">
-          <h3 class="card-title">Średnia kwota przychodów</h3>
+          <h3 class="card-title">Średnia kwota przychodów w tym tyg.:</h3>
           <p class="big spaced">{{ meanOfWeeklyIncomes }} PLN</p>
         </div>
 
