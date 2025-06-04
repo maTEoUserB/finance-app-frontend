@@ -46,7 +46,7 @@ const letPaid = async () => {
 
 <style scoped>
 .obligation-card.not-paid {
-  background: #ffffff;
+  background: #f1f1dc;
   border-radius: 12px;
   padding: 1rem 1.5rem;
   margin-bottom: 1rem;

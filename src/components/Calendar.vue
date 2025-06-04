@@ -81,7 +81,7 @@ function prevMonth() {
 
 <style scoped>
 .calendar {
-  background: white;
+  background: #f1f1dc;
   padding: 1rem;
   border-radius: 12px;
   width: 300px;

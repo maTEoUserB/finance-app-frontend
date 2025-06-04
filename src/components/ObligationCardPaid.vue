@@ -18,7 +18,7 @@ const props = defineProps({
 
 <style scoped>
 .obligation-card.paid {
-  background: #f1f1f1;
+  background: #f1f1dc;
   border-radius: 12px;
   padding: 1rem 1.5rem;
   margin-bottom: 1rem;
