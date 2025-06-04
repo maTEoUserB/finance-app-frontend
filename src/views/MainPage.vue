@@ -89,6 +89,9 @@ import axios from 'axios'
 import {ref, onMounted} from 'vue'
 import {API_URL} from '../constants/const.ts'
 import { keycloak } from '../auth/keycloak';
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 const today = new Date()
 const formattedDate = today.toLocaleDateString('pl-PL', {
@@ -108,7 +111,7 @@ const savingsBalanceEuro = ref(0)
 const lastObligations = ref([])
 const lastTransactions = ref([])
 
-const getMainInformations = async () => {
+const getMainInformation = async () => {
   try {
     const token = keycloak.token;
 
@@ -120,16 +123,21 @@ const getMainInformations = async () => {
     console.log(res.data)
 
     const data = res.data
-    saldo.value = data.saldo?.toFixed(2) ?? '0.00'
-    euroSaldo.value = data.euroSaldo?.toFixed(2) ?? '0.00'
-    weeklyExpenses.value = data.weeklyExpenses?.toFixed(2) ?? '0.00'
-    weeklyChange.value = data.weeklyChange?.toFixed(2) ?? '0.00'
-    meanOfWeeklyExpenses.value = data.meanOfWeeklyExpenses?.toFixed(2) ?? '0.00'
-    categories.value = data.categories ?? []
-    savingsBalance.value = data.savingsBalance?.toFixed(2) ?? '0.00'
-    savingsBalanceEuro.value = data.savingsBalanceEuro?.toFixed(2) ?? '0.00'
-    lastObligations.value = data.lastObligations ?? []
-    lastTransactions.value = data.lastTransactions ?? []
+
+    if(data.isNew) {
+      await router.push('/ustaw-saldo')
+    }else{
+      saldo.value = data.saldo?.toFixed(2) ?? '0.00'
+      euroSaldo.value = data.euroSaldo?.toFixed(2) ?? '0.00'
+      weeklyExpenses.value = data.weeklyExpenses?.toFixed(2) ?? '0.00'
+      weeklyChange.value = data.weeklyChange?.toFixed(2) ?? '0.00'
+      meanOfWeeklyExpenses.value = data.meanOfWeeklyExpenses?.toFixed(2) ?? '0.00'
+      categories.value = data.categories ?? []
+      savingsBalance.value = data.savingsBalance?.toFixed(2) ?? '0.00'
+      savingsBalanceEuro.value = data.savingsBalanceEuro?.toFixed(2) ?? '0.00'
+      lastObligations.value = data.lastObligations ?? []
+      lastTransactions.value = data.lastTransactions ?? []
+    }
 
   } catch (err) {
     console.error('Błąd podczas pobierania danych:', err)
@@ -147,7 +155,7 @@ const formatDate = (dateString) => {
 }
 
 onMounted(() => {
-  getMainInformations()
+  getMainInformation()
 })
 </script>
 

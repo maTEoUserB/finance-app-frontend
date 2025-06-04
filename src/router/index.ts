@@ -64,6 +64,12 @@ const initRouter = createRouter({
             meta: { requiresAuth: true }
         },
         {
+            path: '/ustaw-saldo',
+            name: 'SaldoPage',
+            component: () => import('../views/SaldoPage.vue'),
+            meta: { requiresAuth: true }
+        },
+        {
             path: '/informacje',
             name: 'InformationPage',
             component: () => import('../views/InformationPage.vue'),

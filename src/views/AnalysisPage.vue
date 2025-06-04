@@ -1,6 +1,6 @@
 <template>
   <div class="analysis-page">
-    <HeaderUser />
+    <HeaderUser/>
     <main class="main-content">
       <h2>Analiza Twoich finansów</h2>
       <button class="back-button" @click="router.push('/home')">Wróć na stronę główną</button>
@@ -14,7 +14,7 @@
 
         <div class="card wide">
           <h3 class="card-title">Średnie dzienne wydatki</h3>
-          <ScatterChart :data="[averageLastWeek, averageThisWeek]" />
+          <ScatterChart :data="[averageLastWeek, averageThisWeek]"/>
           <div class="avg-values">
             <span><strong>{{ averageThisWeek }} PLN</strong><br>w tym tygodniu</span>
             <span><strong>{{ averageLastWeek }} PLN</strong><br>poprzedni tydzień</span>
@@ -29,7 +29,8 @@
         <!-- Drugi rząd -->
         <div class="card">
           <h3 class="card-title">Zmiana wydatków</h3>
-          <p :class="weeklyChange >= 0 ? 'red-text' : 'green-text'">{{ weeklyChange > 0 ? '+' : '' }}{{ weeklyChange }} %</p>
+          <p :class="weeklyChange >= 0 ? 'red-text' : 'green-text'">{{ weeklyChange > 0 ? '+' : '' }}{{ weeklyChange }}
+            %</p>
           <p class="spaced-2">względem poprzedniego tyg.</p>
         </div>
 
@@ -54,21 +55,32 @@
           <p class="kwota-1"><strong>{{ totalIncome }} PLN</strong></p>
           <p class="kwota_wyd">Kwota wydatków:</p>
           <p class="kwota-2"><strong>{{ totalExpense }} PLN</strong></p>
-          <p class="w-p">Wydatki stanowią <strong>{{ ((totalExpense / totalIncome) * 100).toFixed(2) }}%</strong> przychodów</p>
+          <p class="w-p">Wydatki stanowią <strong>
+            {{
+              totalIncome > 0
+                  ? ((totalExpense / totalIncome) * 100).toFixed(2) + '%'
+                  : 'brak'
+            }}
+          </strong> przychodów</p>
         </div>
 
 
         <div class="card wide">
           <h3 class="card-title">Największy wydatek w tym tygodniu</h3>
-          <p class="title-max">{{ biggestExpense.transactionTitle }}</p>
-          <p class="date-max">{{ formatDate(biggestExpense.transactionDate) }}</p>
-          <p class="max-wydatek">-{{ biggestExpense.transactionAmount }} PLN</p>
+          <template v-if="biggestExpense">
+            <p class="title-max">{{ biggestExpense.transactionTitle }}</p>
+            <p class="date-max">{{ formatDate(biggestExpense.transactionDate) }}</p>
+            <p class="max-wydatek">-{{ biggestExpense.transactionAmount }} PLN</p>
+          </template>
+          <template v-else>
+            <p>Brak wydatków w tym tygodniu.</p>
+          </template>
         </div>
       </div>
     </main>
 
     <footer class="footer">
-      © Wojskowa Akademia Techniczna 2025<br />
+      © Wojskowa Akademia Techniczna 2025<br/>
       ZeniVault
     </footer>
   </div>
@@ -76,13 +88,13 @@
 
 <script setup>
 import HeaderUser from '@/components/HeaderUser.vue'
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
 import BarChart from '@/components/BarChart.vue'
 import ScatterChart from '@/components/ScatterChart.vue'
 import axios from 'axios'
-import { ref, onMounted, computed } from 'vue'
-import { API_URL } from '@/constants/const.js'
-import { keycloak } from '@/auth/keycloak.js'
+import {ref, onMounted, computed} from 'vue'
+import {API_URL} from '@/constants/const.js'
+import {keycloak} from '@/auth/keycloak.js'
 
 const averageThisWeek = ref(0)
 const averageLastWeek = ref(0)
@@ -92,7 +104,7 @@ const numberOfWeeklyIncomes = ref(0)
 const numberOfWeeklyExpenses = ref(0)
 const totalIncome = ref(0)
 const totalExpense = ref(0)
-const biggestExpense = ref({ title: '', date: '', amount: 0 })
+const biggestExpense = ref({title: '', date: '', amount: 0})
 const lastWeekExpenses = ref([])
 const labels = ref([])
 const amounts = ref([])
@@ -123,7 +135,7 @@ const getAnalysisData = async () => {
     biggestExpense.value = data.biggestExpense
     lastWeekExpenses.value = data.lastWeekExpenses
     labels.value = lastWeekExpenses.value.map(item =>
-        new Date(item.dateLabel).toLocaleDateString("pl-PL", { weekday: "short", day: "numeric" })
+        new Date(item.dateLabel).toLocaleDateString("pl-PL", {weekday: "short", day: "numeric"})
     );
     amounts.value = lastWeekExpenses.value.map(item => item.totalAmount);
 
@@ -270,7 +282,7 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.kwota_wyd{
+.kwota_wyd {
   font-size: 1.3rem;
   font-weight: bold;
 }
