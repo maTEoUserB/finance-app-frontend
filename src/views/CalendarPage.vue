@@ -39,10 +39,6 @@
               :obligation="item"
           />
         </div>
-
-        <div class="calendar-wrapper">
-          <Calendar :obligations="unpaid" />
-        </div>
       </div>
     </main>
 
@@ -59,7 +55,6 @@ import { useRouter } from 'vue-router'
 import HeaderUser from '@/components/HeaderUser.vue'
 import ObligationCardPaid from '@/components/ObligationCardPaid.vue'
 import ObligationCardNotPaid from '@/components/ObligationCardNotPaid.vue'
-import Calendar from '@/components/Calendar.vue'
 import {keycloak} from "@/auth/keycloak.js";
 import axios from "axios";
 import {API_URL} from "@/constants/const.js";
