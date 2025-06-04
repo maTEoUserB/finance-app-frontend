@@ -62,6 +62,11 @@ const initRouter = createRouter({
             name: 'CalendarPage',
             component: () => import('../views/CalendarPage.vue'),
             meta: { requiresAuth: true }
+        },
+        {
+            path: '/informacje',
+            name: 'InformationPage',
+            component: () => import('../views/InformationPage.vue'),
         }
 
     ],

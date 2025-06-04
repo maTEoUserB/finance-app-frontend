@@ -268,10 +268,6 @@ const cancel = () => {
   gap: 0.4rem;
 }
 
-.expense {
-  color: red;
-}
-
 .green {
   color: green;
   font-weight: bold;
