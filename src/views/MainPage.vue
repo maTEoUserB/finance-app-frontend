@@ -148,15 +148,6 @@ const getMainInformation = async () => {
   }
 }
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('pl-PL', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  })
-}
-
 onMounted(() => {
   getMainInformation()
 })
